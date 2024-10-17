@@ -1,0 +1,47 @@
+import NavBar from '@/components/ui/NavBar'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+
+export default function FeedingPage() {
+  return (
+    <div className="bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] h-screen">
+      <NavBar showArrow={true} />
+      <div className="flex flex-col gap-5 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black">
+        <Card className="max-w-[30rem]">
+          <CardHeader>
+            <CardTitle>Manual Feeding Amount</CardTitle>
+            <CardDescription>1 Cup</CardDescription>
+          </CardHeader>
+        </Card>
+        <Card className="max-w-[30rem]">
+          <CardHeader>
+            <CardTitle>Scheduled Feeding</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
+              <span className="flex h-2 w-2 translate-y-1 rounded-full bg[#F7BE7A]" />
+              <div className="space-y-2">
+                <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
+                <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
+                <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
+                <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] w-full">
+              Edit Feeding Schedule
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  )
+}

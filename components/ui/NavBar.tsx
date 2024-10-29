@@ -2,6 +2,7 @@ import { IoIosArrowBack } from 'react-icons/io'
 import Link from 'next/link'
 
 type NavBar = {
+  title?: string
   showArrow?: boolean
 }
 
@@ -11,7 +12,9 @@ export default function NavBar(props: NavBar) {
       <Link href="/" className="absolute left-0 px-12">
         {props.showArrow && <IoIosArrowBack className="fill-white" />}
       </Link>
-      <h1 className="text-white text-md">Smart Pet Feeder</h1>
+      <h1 className="text-white text-md">
+        {props.title || 'Smart Pet Feeder'}
+      </h1>
     </div>
   )
 }

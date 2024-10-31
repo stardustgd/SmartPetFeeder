@@ -1,4 +1,5 @@
 import NavBar from '@/components/ui/NavBar'
+import Link from 'next/link'
 import { FaGithub } from 'react-icons/fa'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -19,6 +20,10 @@ export default function RegisterPage() {
             <Label>Password</Label>
             <Input type="password" />
           </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label>Confirm Password</Label>
+            <Input type="password" />
+          </div>
         </form>
         <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] w-full">
           Register
@@ -32,6 +37,12 @@ export default function RegisterPage() {
           <FaGithub />
           Continue with GitHub
         </Button>
+        <Link href="/login/">
+          <h1 className="text-center text-bold">
+            Already have an account?{' '}
+            <span className="text-blue-600">Login</span>
+          </h1>
+        </Link>
       </div>
     </>
   )

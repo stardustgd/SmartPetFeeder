@@ -1,7 +1,18 @@
-import NavBar from '@/components/ui/NavBar'
-import { Button } from '@/components/ui/button'
 import CustomCard from '@/components/ui/CustomCard'
+import DaySelector from '@/components/ui/DaySelector'
+import NavBar from '@/components/ui/NavBar'
+import TimePicker from '@/components/ui/TimePicker'
+import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer'
 
 export default function FeedingPage() {
   return (
@@ -22,9 +33,30 @@ export default function FeedingPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] w-full">
-              Edit Feeding Schedule
-            </Button>
+            <Drawer>
+              <DrawerTrigger asChild>
+                <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] w-full">
+                  Edit Feeding Schedule
+                </Button>
+              </DrawerTrigger>
+              <DrawerContent>
+                <div className="mx-auto w-full max-w-sm">
+                  <DrawerHeader>
+                    <DrawerTitle>Edit Feeding Schedule</DrawerTitle>
+                  </DrawerHeader>
+                  <div className="flex flex-col p-4 gap-5">
+                    <DaySelector />
+                    <TimePicker />
+                  </div>
+                </div>
+                <DrawerFooter>
+                  <Button>Save Schedule</Button>
+                  <DrawerClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
           </CardFooter>
         </CustomCard>
       </div>

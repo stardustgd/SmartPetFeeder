@@ -110,6 +110,7 @@ export default function SettingsPage() {
         <Label className="text-md font-bold">General</Label>
         {settings.general.map((setting) => (
           <SettingsCard
+            key={setting.href}
             title={setting.title}
             href={setting.href}
             Icon={setting.Icon}
@@ -119,6 +120,7 @@ export default function SettingsPage() {
         <Label className="text-md font-bold">Feedback</Label>
         {settings.feedback.map((setting) => (
           <SettingsCard
+            key={setting.href}
             title={setting.title}
             href={setting.href}
             Icon={setting.Icon}

@@ -6,6 +6,11 @@ type DayGroupItemProps = {
   text: string
 }
 
+type DaySelectorProps = {
+  selectedDays: string[]
+  setSelectedDays: (days: string[]) => void
+}
+
 function DayGroupItem(props: DayGroupItemProps) {
   return (
     <ToggleGroupItem
@@ -18,17 +23,28 @@ function DayGroupItem(props: DayGroupItemProps) {
   )
 }
 
-export default function DaySelector() {
+export default function DaySelector({
+  selectedDays,
+  setSelectedDays,
+}: DaySelectorProps) {
+  const handleSelect = (newSelectedDays: string[]) => {
+    setSelectedDays(newSelectedDays)
+  }
+
   return (
-    <div className="flex items-center justify-center space-x-2">
-      <ToggleGroup type="multiple">
+    <div className="items-center justify-center space-x-2 w-full">
+      <ToggleGroup
+        type="multiple"
+        value={selectedDays}
+        onValueChange={handleSelect}
+      >
         <DayGroupItem value="sunday" label="Sunday" text="Sun" />
-        <DayGroupItem value="Monday" label="Monday" text="Mon" />
-        <DayGroupItem value="Tuesday" label="Tuesday" text="Tue" />
-        <DayGroupItem value="Wednesday" label="Wednesday" text="Wed" />
-        <DayGroupItem value="Thursday" label="Thursday" text="Thu" />
-        <DayGroupItem value="Friday" label="Friday" text="Fri" />
-        <DayGroupItem value="Saturday" label="Saturday" text="Sat" />
+        <DayGroupItem value="monday" label="Monday" text="Mon" />
+        <DayGroupItem value="tuesday" label="Tuesday" text="Tue" />
+        <DayGroupItem value="wednesday" label="Wednesday" text="Wed" />
+        <DayGroupItem value="thursday" label="Thursday" text="Thu" />
+        <DayGroupItem value="friday" label="Friday" text="Fri" />
+        <DayGroupItem value="saturday" label="Saturday" text="Sat" />
       </ToggleGroup>
     </div>
   )

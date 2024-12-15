@@ -1,3 +1,7 @@
+'use client'
+
+import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
 import CustomCard from '@/components/ui/CustomCard'
 import DaySelector from '@/components/ui/DaySelector'
 import NavBar from '@/components/ui/NavBar'
@@ -15,10 +19,46 @@ import {
 } from '@/components/ui/drawer'
 
 export default function FeedingPage() {
+  const [selectedDays, setSelectedDays] = useState<string[]>([])
+  const [time, setTime] = useState<string>('')
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false)
+  const { toast } = useToast()
+
+  const handleSubmit = () => {
+    if (selectedDays.length === 0 || time === '') {
+      console.log('error')
+      toast({
+        title: 'Schedule Error',
+        description: 'Please select days and a time for the feeding schedule.',
+        variant: 'destructive',
+      })
+    } else {
+      const newSchedule = {
+        days: selectedDays,
+        time: time,
+      }
+
+      const scheduleJson = JSON.stringify(newSchedule)
+
+      console.log(scheduleJson)
+
+      // Send to backend when implemented
+
+      toast({
+        title: 'Schedule Saved',
+        description: 'Feeding schedule has been saved.',
+      })
+
+      setIsDrawerOpen(false)
+      setSelectedDays([])
+      setTime('')
+    }
+  }
+
   return (
-    <div className="bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] h-screen">
+    <div className="flex flex-col bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
       <NavBar showArrow={true} />
-      <div className="flex flex-col gap-5 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black">
+      <div className="flex flex-col flex-grow gap-5 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black">
         <CustomCard cardTitle="Manual Feeding Amount" cardDescription="1 Cup" />
         <CustomCard cardTitle="Scheduled Feeding">
           <CardContent>
@@ -33,24 +73,27 @@ export default function FeedingPage() {
             </div>
           </CardContent>
           <CardFooter>
-            <Drawer>
+            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
               <DrawerTrigger asChild>
                 <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] w-full">
-                  Edit Feeding Schedule
+                  Create Feeding Schedule
                 </Button>
               </DrawerTrigger>
               <DrawerContent>
                 <div className="mx-auto w-full max-w-sm">
                   <DrawerHeader>
-                    <DrawerTitle>Edit Feeding Schedule</DrawerTitle>
+                    <DrawerTitle>Create Feeding Schedule</DrawerTitle>
                   </DrawerHeader>
                   <div className="flex flex-col p-4 gap-5">
-                    <DaySelector />
-                    <TimePicker />
+                    <DaySelector
+                      selectedDays={selectedDays}
+                      setSelectedDays={setSelectedDays}
+                    />
+                    <TimePicker time={time} setTime={setTime} />
                   </div>
                 </div>
                 <DrawerFooter>
-                  <Button>Save Schedule</Button>
+                  <Button onClick={handleSubmit}>Save Schedule</Button>
                   <DrawerClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DrawerClose>

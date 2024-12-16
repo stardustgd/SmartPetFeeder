@@ -12,11 +12,13 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { FaPlus } from 'react-icons/fa'
 
 export default function FeedingPage() {
   const [selectedDays, setSelectedDays] = useState<string[]>([])
@@ -57,7 +59,7 @@ export default function FeedingPage() {
 
   return (
     <div className="flex flex-col bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
-      <NavBar showArrow={true} />
+      <NavBar showArrow={true} title="Feeding" />
       <div className="flex flex-col flex-grow gap-5 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black">
         <CustomCard cardTitle="Manual Feeding Amount" cardDescription="1 Cup" />
         <CustomCard cardTitle="Scheduled Feeding">
@@ -75,14 +77,17 @@ export default function FeedingPage() {
           <CardFooter>
             <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
               <DrawerTrigger asChild>
-                <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] w-full">
-                  Create Feeding Schedule
+                <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] text-xl h-12 w-full">
+                  <FaPlus />
                 </Button>
               </DrawerTrigger>
               <DrawerContent>
                 <div className="mx-auto w-full max-w-sm">
                   <DrawerHeader>
-                    <DrawerTitle>Create Feeding Schedule</DrawerTitle>
+                    <DrawerTitle>New Schedule</DrawerTitle>
+                    <DrawerDescription>
+                      Create a new feeding schedule.
+                    </DrawerDescription>
                   </DrawerHeader>
                   <div className="flex flex-col p-4 gap-5">
                     <DaySelector

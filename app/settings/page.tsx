@@ -103,9 +103,9 @@ export default function SettingsPage() {
     ],
   }
   return (
-    <div>
+    <>
       <NavBar title="Settings" showArrow={true} />
-      <div className="flex flex-col gap-3 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black">
+      <div className="flex flex-col gap-3 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black pb-20">
         <SearchInput />
         <Label className="text-md font-bold">General</Label>
         {settings.general.map((setting) => (
@@ -127,6 +127,6 @@ export default function SettingsPage() {
           />
         ))}
       </div>
-    </div>
+    </>
   )
 }

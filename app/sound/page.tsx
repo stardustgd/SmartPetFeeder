@@ -16,7 +16,7 @@ import { FaPlus } from 'react-icons/fa'
 export default function SoundPage() {
   return (
     <div className="flex flex-col bg-gradient-to-b from-[#433D8B] to-[#17153B] min-h-screen pb-8">
-      <NavBar showArrow={true} title="Sound" />
+      <NavBar title="Sound" />
       <div className="h-full flex items-center justify-center grow">
         <Button className="bg-white size-72 rounded-full text-black text-2xl">
           Music

@@ -104,7 +104,7 @@ export default function SettingsPage() {
   }
   return (
     <>
-      <NavBar title="Settings" showArrow={true} />
+      <NavBar title="Settings" />
       <div className="flex flex-col gap-3 px-5 py-5 w-screen h-screen rounded-t-2xl bg-[#F2F2F2] text-black pb-20 md:pb-0 md:pl-20">
         <SearchInput />
         <Label className="text-md font-bold">General</Label>

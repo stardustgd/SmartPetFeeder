@@ -16,7 +16,7 @@ import { FaPlus } from 'react-icons/fa'
 export default function WaterPage() {
   return (
     <div className="flex flex-col bg-gradient-to-b from-[#53B1C9] to-[#394E92] min-h-screen pb-8">
-      <NavBar showArrow={true} title="Water" />
+      <NavBar title="Water" />
       <div className="h-full flex items-center justify-center grow">
         <Button className="bg-white size-72 rounded-full text-black text-2xl active:size-[16rem]">
           Water

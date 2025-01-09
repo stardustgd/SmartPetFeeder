@@ -34,7 +34,7 @@ export default function RegisterPage() {
 
   return (
     <>
-      <NavBar title="Register" showArrow={true} />
+      <NavBar title="Register" />
       <div className="flex flex-col items-center gap-3 px-5 py-5 w-screen h-fit rounded-2xl bg-[#F2F2F2] text-black">
         <h1 className="text-4xl">Register</h1>
         <Form {...form}>

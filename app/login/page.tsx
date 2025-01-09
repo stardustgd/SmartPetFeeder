@@ -34,7 +34,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <NavBar title="Login" showArrow={true} />
+      <NavBar title="Login" />
       <div className="flex flex-col items-center gap-3 px-5 py-5 w-screen h-fit rounded-2xl bg-[#F2F2F2] text-black">
         <h1 className="text-4xl">Sign In</h1>
         <Form {...form}>

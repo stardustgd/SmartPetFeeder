@@ -52,13 +52,13 @@ export default function Footer() {
   ]
 
   return (
-    <div className="bg-[#f2f2f2] fixed bottom-0 w-full px-8 py-4 flex flex-row items-center justify-between border border-t-gray-300">
+    <div className="bg-[#f2f2f2] fixed bottom-0 w-full md:w-auto h-auto md:h-screen px-8 md:px-4 py-4 md:py-8 flex flex-row md:flex-col items-center justify-between border border-t-gray-300">
       {links.map(({ href, icon: Icon, filledIcon: FilledIcon, fillColor }) => (
         <Link key={href} href={href}>
           {pathname === href ? (
             <FilledIcon className={`size-6 ${fillColor}`} />
           ) : (
-            <Icon className="size-6" />
+            <Icon className="size-6 fill-black" />
           )}
         </Link>
       ))}

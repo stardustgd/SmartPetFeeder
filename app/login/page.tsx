@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FaGithub } from 'react-icons/fa'
 
-import NavBar from '@/components/ui/NavBar'
+import NavBar from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import {
   Form,

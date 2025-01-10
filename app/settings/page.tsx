@@ -15,7 +15,7 @@ import { IconType } from 'react-icons'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader } from '@/components/ui/card'
-import NavBar from '@/components/ui/NavBar'
+import NavBar from '@/components/NavBar'
 import { IoIosArrowForward } from 'react-icons/io'
 
 type SettingsCardProps = {

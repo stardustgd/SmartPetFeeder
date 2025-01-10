@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import NavBar from '@/components/ui/NavBar'
+import NavBar from '@/components/NavBar'
 import { FaCamera, FaMicrophone, FaPhoneAlt } from 'react-icons/fa'
 
 export default function CallPage() {

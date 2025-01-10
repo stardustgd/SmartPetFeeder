@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import CustomCard from '@/components/ui/CustomCard'
-import DaySelector from '@/components/ui/DaySelector'
-import NavBar from '@/components/ui/NavBar'
-import TimePicker from '@/components/ui/TimePicker'
+import CustomCard from '@/components/CustomCard'
+import DaySelector from '@/components/inputs/DaySelector'
+import NavBar from '@/components/NavBar'
+import TimePicker from '@/components/inputs/TimePicker'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import {

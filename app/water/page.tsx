@@ -1,5 +1,5 @@
-import CustomCard from '@/components/ui/CustomCard'
-import NavBar from '@/components/ui/NavBar'
+import CustomCard from '@/components/CustomCard'
+import NavBar from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
 import {

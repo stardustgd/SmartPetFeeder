@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import NavBar from '@/components/ui/NavBar'
+import NavBar from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
 
 type MenuButtonProps = {

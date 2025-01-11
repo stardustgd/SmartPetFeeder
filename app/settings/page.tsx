@@ -8,9 +8,11 @@ import {
   FaPaperPlane,
   FaPhoneAlt,
   FaQuestionCircle,
+  FaRecordVinyl,
   FaSearch,
   FaShieldAlt,
 } from 'react-icons/fa'
+import { GiDogBowl, GiWaterDrop } from 'react-icons/gi'
 import { IconType } from 'react-icons'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -79,6 +81,23 @@ export default function SettingsPage() {
         href: 'yourdevice',
       },
     ],
+    preferences: [
+      {
+        title: 'Feeder Preferences',
+        href: '/feeder',
+        Icon: GiDogBowl,
+      },
+      {
+        title: 'Water Preferences',
+        href: '/water',
+        Icon: GiWaterDrop,
+      },
+      {
+        title: 'Music Preferences',
+        href: '/sound',
+        Icon: FaRecordVinyl,
+      },
+    ],
     feedback: [
       {
         title: 'About',
@@ -105,7 +124,7 @@ export default function SettingsPage() {
   return (
     <>
       <NavBar title="Settings" />
-      <div className="flex flex-col gap-3 px-5 py-5 w-screen h-screen rounded-t-2xl bg-[#F2F2F2] text-black pb-20 md:pb-0 md:pl-20">
+      <div className="flex flex-col gap-3 px-5 py-5 w-screen h-fit rounded-t-2xl bg-[#F2F2F2] text-black pb-24 md:pb-0 md:pl-20">
         <SearchInput />
         <Label className="text-md font-bold">General</Label>
         {settings.general.map((setting) => (
@@ -116,7 +135,15 @@ export default function SettingsPage() {
             Icon={setting.Icon}
           />
         ))}
-
+        <Label className="text-md font-bold">Preferences</Label>
+        {settings.preferences.map((setting) => (
+          <SettingsCard
+            key={setting.href}
+            title={setting.title}
+            href={setting.href}
+            Icon={setting.Icon}
+          />
+        ))}
         <Label className="text-md font-bold">Feedback</Label>
         {settings.feedback.map((setting) => (
           <SettingsCard

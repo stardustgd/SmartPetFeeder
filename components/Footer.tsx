@@ -20,7 +20,7 @@ export default function Footer() {
 
   const links = [
     {
-      href: '/feeding',
+      href: '/',
       icon: PiBone,
       filledIcon: PiBoneFill,
       fillColor: 'fill-[#BFA88E]',

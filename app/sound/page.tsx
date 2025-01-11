@@ -12,19 +12,30 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import { FaPlus } from 'react-icons/fa'
+import Image from 'next/image'
 
 export default function SoundPage() {
   return (
     <div className="flex flex-col bg-gradient-to-b from-[#433D8B] to-[#17153B] min-h-screen pb-8">
       <NavBar title="Sound" />
       <div className="h-full flex items-center justify-center grow">
-        <Button className="bg-white size-72 rounded-full text-black text-2xl">
-          Music
-        </Button>
+        <div className="">
+          <Image src="/vinyl.png" width={350} height={350} alt="Vinyl Player" />
+        </div>
+        <div className="absolute">
+          <Image
+            src="/vinyl_stem.png"
+            width={350}
+            height={350}
+            alt="Vinyl Stem"
+          />
+        </div>
       </div>
       <Drawer>
         <DrawerTrigger asChild>
-          <Button className="bg-transparent h-24">Open Drawer</Button>
+          <Button className="bg-transparent h-24 shadow-none">
+            Open Drawer
+          </Button>
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">

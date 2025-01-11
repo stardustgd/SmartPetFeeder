@@ -1,3 +1,8 @@
+'use client'
+
+import { FaPlus } from 'react-icons/fa'
+import Image from 'next/image'
+
 import CustomCard from '@/components/CustomCard'
 import NavBar from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
@@ -11,20 +16,29 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import { FaPlus } from 'react-icons/fa'
 
 export default function WaterPage() {
+  const handleClick = () => {
+    console.log('click')
+  }
+
   return (
     <div className="flex flex-col bg-gradient-to-b from-[#53B1C9] to-[#394E92] min-h-screen pb-8">
       <NavBar title="Water" />
       <div className="h-full flex items-center justify-center grow">
-        <Button className="bg-white size-72 rounded-full text-black text-2xl active:size-[16rem]">
-          Water
-        </Button>
+        <Image
+          src="/water.gif"
+          width={350}
+          height={350}
+          alt="Water Button"
+          onClick={handleClick}
+        />
       </div>
       <Drawer>
         <DrawerTrigger asChild>
-          <Button className="bg-transparent h-24">Open Drawer</Button>
+          <Button className="bg-transparent h-24 shadow-none">
+            Open Drawer
+          </Button>
         </DrawerTrigger>
         <DrawerContent>
           <div className="mx-auto w-full max-w-sm">

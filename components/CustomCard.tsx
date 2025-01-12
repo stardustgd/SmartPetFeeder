@@ -18,7 +18,7 @@ export default function CustomCard({
   children,
 }: CustomCardProps) {
   return (
-    <Card className="max-w-[30rem]">
+    <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
         <CardTitle>{cardTitle}</CardTitle>
         {cardDescription && (

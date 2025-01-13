@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <div className="flex flex-col bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
       <NavBar />
-      <div className="h-full flex flex-col items-center justify-center grow mr-20">
+      <div className="h-fit flex flex-col items-center justify-center grow mr-20">
         <div className="mb-52 z-10">
           <Image
             src="/feeder.png"
@@ -58,7 +58,7 @@ export default function Home() {
           </div>
         )}
       </div>
-      <div className="bottom-0 pb-16 md:pb-0 w-full">
+      <div className="w-full bottom-0 absolute pb-16 md:pb-0">
         <FeederPreferences />
       </div>
     </div>

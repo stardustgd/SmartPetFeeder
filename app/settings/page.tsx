@@ -9,13 +9,11 @@ import {
   FaPhoneAlt,
   FaQuestionCircle,
   FaRecordVinyl,
-  FaSearch,
   FaShieldAlt,
 } from 'react-icons/fa'
 import { GiDogBowl, GiWaterDrop } from 'react-icons/gi'
 import { IconType } from 'react-icons'
 import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Card, CardHeader } from '@/components/ui/card'
 import NavBar from '@/components/NavBar'
 import { IoIosArrowForward } from 'react-icons/io'
@@ -24,15 +22,6 @@ type SettingsCardProps = {
   title: string
   href: string
   Icon?: IconType
-}
-
-function SearchInput() {
-  return (
-    <div className="relative w-[80%] mx-auto">
-      <Input type="search" placeholder="Search..." className="pl-8" />
-      <FaSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-500" />
-    </div>
-  )
 }
 
 function SettingsCard({ title, href, Icon = FaCog }: SettingsCardProps) {
@@ -58,7 +47,7 @@ export default function SettingsPage() {
     general: [
       {
         title: 'Account',
-        href: 'account',
+        href: '/login',
         Icon: IoPerson,
       },
       {
@@ -84,7 +73,7 @@ export default function SettingsPage() {
     preferences: [
       {
         title: 'Feeder Preferences',
-        href: '/feeder',
+        href: '/feeding',
         Icon: GiDogBowl,
       },
       {
@@ -125,7 +114,6 @@ export default function SettingsPage() {
     <>
       <NavBar title="Settings" />
       <div className="flex flex-col gap-3 px-5 py-5 w-screen h-fit rounded-t-2xl bg-[#F2F2F2] text-black pb-24 md:pb-0 md:pl-20">
-        <SearchInput />
         <Label className="text-md font-bold">General</Label>
         {settings.general.map((setting) => (
           <SettingsCard

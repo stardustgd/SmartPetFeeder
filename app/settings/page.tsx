@@ -11,7 +11,7 @@ import {
   FaRecordVinyl,
   FaShieldAlt,
 } from 'react-icons/fa'
-import { GiDogBowl, GiWaterDrop } from 'react-icons/gi'
+import { GiDogBowl } from 'react-icons/gi'
 import { IconType } from 'react-icons'
 import { Label } from '@/components/ui/label'
 import { Card, CardHeader } from '@/components/ui/card'
@@ -75,11 +75,6 @@ export default function SettingsPage() {
         title: 'Feeder Preferences',
         href: '/feeding',
         Icon: GiDogBowl,
-      },
-      {
-        title: 'Water Preferences',
-        href: '/water',
-        Icon: GiWaterDrop,
       },
       {
         title: 'Music Preferences',

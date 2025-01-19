@@ -4,8 +4,6 @@ import Link from 'next/link'
 import {
   PiBone,
   PiBoneFill,
-  PiDrop,
-  PiDropFill,
   PiGear,
   PiGearFill,
   PiPhone,
@@ -24,12 +22,6 @@ export default function Footer() {
       icon: PiBone,
       filledIcon: PiBoneFill,
       fillColor: 'fill-[#BFA88E]',
-    },
-    {
-      href: '/water',
-      icon: PiDrop,
-      filledIcon: PiDropFill,
-      fillColor: 'fill-[#347BA7]',
     },
     {
       href: '/sound',

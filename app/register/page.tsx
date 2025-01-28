@@ -18,6 +18,10 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RegisterSchema } from '@/schema'
+import { useState, useEffect } from "react";
+import { /*useParams,*/ useNavigate } from "react-router-dom";
+import { useRouter, useParams } from 'next/navigation';
+
 
 export default function RegisterPage() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -28,7 +32,78 @@ export default function RegisterPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof RegisterSchema>) {
+  // const [form, setForm] = useState<typeof RegisterSchema>();
+  const [isNew, setIsNew] = useState(true);
+  const params = useParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    async function fetchData() {
+      const id = params.id?.toString() || undefined;
+      if (!id) return;
+      setIsNew(false);
+  
+      try {
+        const response = await fetch(`http://localhost:5050/record/${id}`);
+        if (!response.ok) {
+          const message = `An error has occurred: ${response.statusText}`;
+          console.error(message);
+          return;
+        }
+  
+        const record = await response.json();
+        if (!record) {
+          console.warn(`Record with id ${id} not found`);
+          router.push('/'); // Use Next.js router to navigate
+          return;
+        }
+  
+        // Set form values using react-hook-form's reset method
+        form.reset(record);
+      } catch (error) {
+        console.error('Error fetching record: ', error);
+      }
+    }
+  
+    fetchData();
+  }, [params.id, router, form]);
+
+
+
+  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+    const person = { ...values };
+    try {
+      let response;
+      if (isNew) {
+        // if we are adding a new record we will POST to /record.
+        response = await fetch("http://localhost:5050/record", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(person),
+        });
+      } else {
+        // if we are updating a record we will PATCH to /record/:id.
+        response = await fetch(`http://localhost:5050/record/${params.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(person),
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('A problem occurred adding or updating a record: ', error);
+    } finally {
+      // setForm(values);
+      // navigate("/");
+      router.push('/');
+    }
     console.log(values)
   }
 

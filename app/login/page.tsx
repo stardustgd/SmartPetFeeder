@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
+import { useState, useEffect } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 
 export default function LoginPage() {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -28,8 +30,70 @@ export default function LoginPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof LoginSchema>) {
-    console.log(values)
+  const [isNew, setIsNew] = useState(true)
+  const params = useParams()
+  const router = useRouter()
+
+  useEffect(() => {
+    async function fetchData() {
+      const id = params.id?.toString() || undefined
+      if (!id) return
+      setIsNew(false)
+
+      try {
+        const response = await fetch(`http://localhost:5050/record/${id}`)
+        if (!response.ok) {
+          const message = `An error has occurred: ${response.statusText}`
+          console.error(message)
+          return
+        }
+
+        const record = await response.json()
+        if (!record) {
+          console.warn(`Record with id ${id} not found`)
+          router.push('/')
+          return
+        }
+
+        form.reset(record)
+      } catch (error) {
+        console.error('Error fetching record: ', error)
+      }
+    }
+
+    fetchData()
+  }, [params.id, router, form])
+
+  async function onSubmit(values: z.infer<typeof LoginSchema>) {
+    try {
+      // Send login data to the backend
+      const response = await fetch('http://localhost:5050/record/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values), // Send email and password
+      });
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        console.log('Login successful:', data);
+        router.push('/'); 
+      } else {
+        console.error('Login failed:', data.message);
+        form.setError('email', {
+          type: 'manual',
+          message: data.message || 'Invalid email or password',
+        });
+      }
+    } catch (error) {
+      console.error('An error occurred during login:', error);
+      form.setError('email', {
+        type: 'manual',
+        message: 'An error occurred during login',
+      });
+    }
   }
 
   return (

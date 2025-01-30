@@ -55,7 +55,6 @@ export default function RegisterPage() {
           return
         }
 
-        // Set form values using react-hook-form's reset method
         form.reset(record)
       } catch (error) {
         console.error('Error fetching record: ', error)
@@ -67,6 +66,39 @@ export default function RegisterPage() {
 
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     const person = { ...values }
+
+    // Check if the email already exists
+    try {
+      const emailCheckResponse = await fetch(
+        `http://localhost:5050/record/check-email`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email: person.email }),
+        }
+      )
+
+      const emailCheckResult = await emailCheckResponse.json()
+
+      if (emailCheckResult.exists) {
+        // If the email exists, show an error message
+        form.setError('email', {
+          type: 'manual',
+          message: 'Email already exists',
+        })
+        return
+      }
+    } catch (error) {
+      console.error('Error checking email: ', error)
+      form.setError('email', {
+        type: 'manual',
+        message: 'An error occurred while checking the email',
+      })
+      return
+    }
+
     try {
       let response
       if (isNew) {
@@ -97,7 +129,6 @@ export default function RegisterPage() {
     } finally {
       router.push('/')
     }
-    console.log(values)
   }
 
   return (

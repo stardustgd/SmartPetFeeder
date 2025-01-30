@@ -96,6 +96,39 @@ router.post("/check-email", async (req, res) => {
   }
 });
 
+// Login route
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Validate request body
+    if (!email || !password) {
+      return res.status(400).json({ success: false, message: "Email and password are required" });
+    }
+
+    // Find the user by email
+    const collection = await db.collection("users");
+    const user = await collection.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
+    }
+
+    // Compare the provided password with the hashed password in the database
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ success: false, message: "Invalid email or password" });
+    }
+
+    // Login successful
+    res.status(200).json({ success: true, message: "Login successful", user: { email: user.email } });
+  } catch (err) {
+    console.error("Error during login:", err);
+    res.status(500).json({ success: false, message: "An error occurred during login" });
+  }
+});
+
 // This section will help you update a record by id.
 router.patch("/:id", async (req, res) => {
   try {

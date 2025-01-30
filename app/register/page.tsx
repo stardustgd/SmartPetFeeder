@@ -134,7 +134,6 @@ export default function RegisterPage() {
       // navigate("/");
       router.push('/');
     }
-    console.log(values)
   }
 
   return (

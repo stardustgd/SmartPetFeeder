@@ -39,7 +39,7 @@ export default function LoginPage() {
       if (!id) return
 
       try {
-        const response = await fetch(`http://localhost:5050/record/${id}`)
+        const response = await fetch(`http://localhost:5050/api/users${id}`)
         if (!response.ok) {
           const message = `An error has occurred: ${response.statusText}`
           console.error(message)
@@ -65,12 +65,12 @@ export default function LoginPage() {
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
     try {
       // Send login data to the backend
-      const response = await fetch('http://localhost:5050/record/login', {
+      const response = await fetch('http://localhost:5050/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values), // Send email and password
+        body: JSON.stringify(values),
       })
 
       const data = await response.json()

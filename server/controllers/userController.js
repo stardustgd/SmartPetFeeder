@@ -1,13 +1,9 @@
-import express from 'express'
 import bcrypt from 'bcrypt'
 import { ObjectId } from 'mongodb'
-
 import db from '../db/connection.js'
 
-const router = express.Router()
-
 // Get all users
-router.get('/', async (_req, res) => {
+export const getAllUsers = async (_req, res) => {
   try {
     let collection = db.collection('users')
     let results = await collection.find({}).toArray()
@@ -16,10 +12,10 @@ router.get('/', async (_req, res) => {
     console.error(err)
     res.status(500).send('Error fetching records')
   }
-})
+}
 
 // Get a single user by ID
-router.get('/:id', async (req, res) => {
+export const getUserById = async (req, res) => {
   try {
     let collection = db.collection('users')
     let query = { _id: new ObjectId(req.params.id) }
@@ -34,10 +30,10 @@ router.get('/:id', async (req, res) => {
     console.error(err)
     res.status(500).send('Error fetching record')
   }
-})
+}
 
 // Create a new record
-router.post('/', async (req, res) => {
+export const createUser = async (req, res) => {
   try {
     if (!req.body.email || !req.body.password || !req.body.confirmPassword) {
       return res.status(400).send('Missing required fields')
@@ -61,9 +57,9 @@ router.post('/', async (req, res) => {
     console.error(err)
     res.status(500).send('Error adding record')
   }
-})
+}
 
-router.post('/check-email', async (req, res) => {
+export const checkEmail = async (req, res) => {
   try {
     const { email } = req.body
 
@@ -93,10 +89,10 @@ router.post('/check-email', async (req, res) => {
       .status(500)
       .json({ error: 'An error occurred while checking the email' })
   }
-})
+}
 
 // Login route
-router.post('/login', async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body
 
@@ -138,10 +134,10 @@ router.post('/login', async (req, res) => {
       .status(500)
       .json({ success: false, message: 'An error occurred during login' })
   }
-})
+}
 
 // Update a record by id
-router.patch('/:id', async (req, res) => {
+export const updateUser = async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) }
     const updates = {
@@ -158,10 +154,10 @@ router.patch('/:id', async (req, res) => {
     console.error(err)
     res.status(500).send('Error updating record')
   }
-})
+}
 
-// Delete a record
-router.delete('/:id', async (req, res) => {
+// Delete a user
+export const deleteUser = async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) }
 
@@ -173,6 +169,4 @@ router.delete('/:id', async (req, res) => {
     console.error(err)
     res.status(500).send('Error deleting record')
   }
-})
-
-export default router
+}

@@ -41,7 +41,7 @@ export default function RegisterPage() {
       setIsNew(false)
 
       try {
-        const response = await fetch(`http://localhost:5050/record/${id}`)
+        const response = await fetch(`http://localhost:5050/api/users/${id}`)
         if (!response.ok) {
           const message = `An error has occurred: ${response.statusText}`
           console.error(message)
@@ -72,8 +72,8 @@ export default function RegisterPage() {
     try {
       let response
       if (isNew) {
-        // if we are adding a new record we will POST to /record.
-        response = await fetch('http://localhost:5050/record', {
+        // if we are adding a new record we will POST to /api/users
+        response = await fetch('http://localhost:5050/api/users', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -81,8 +81,8 @@ export default function RegisterPage() {
           body: JSON.stringify(person),
         })
       } else {
-        // if we are updating a record we will PATCH to /record/:id.
-        response = await fetch(`http://localhost:5050/record/${params.id}`, {
+        // if we are updating a record we will PATCH to /api/users/:id.
+        response = await fetch(`http://localhost:5050/api/users/${params.id}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

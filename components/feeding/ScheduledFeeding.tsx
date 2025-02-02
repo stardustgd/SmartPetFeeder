@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
+import AmountSelector from '@/components/inputs/AmountSelector'
 import CustomCard from '@/components/CustomCard'
 import DaySelector from '@/components/inputs/DaySelector'
 import TimePicker from '@/components/inputs/TimePicker'
@@ -34,22 +35,29 @@ import {
 export default function ScheduledFeeding() {
   const [selectedDays, setSelectedDays] = useState<string[]>([])
   const [time, setTime] = useState<string>('')
+  const [amount, setAmount] = useState<number>(0)
   const [isOpen, setIsOpen] = useState(false)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const { toast } = useToast()
 
   const handleSubmit = () => {
     if (selectedDays.length === 0 || time === '') {
-      console.log('error')
       toast({
         title: 'Schedule Error',
-        description: 'Please select days and a time for the feeding schedule.',
+        description: 'Please select days and a time for the feeding schedule',
+        variant: 'destructive',
+      })
+    } else if (amount < 1 || amount > 50) {
+      toast({
+        title: 'Schedule Error',
+        description: 'Please enter a valid feeding amount',
         variant: 'destructive',
       })
     } else {
       const newSchedule = {
         days: selectedDays,
         time: time,
+        feedingAmount: amount,
       }
 
       const scheduleJson = JSON.stringify(newSchedule)
@@ -66,6 +74,7 @@ export default function ScheduledFeeding() {
       setIsOpen(false)
       setSelectedDays([])
       setTime('')
+      setAmount(0)
     }
   }
 
@@ -114,14 +123,21 @@ export default function ScheduledFeeding() {
                   setSelectedDays={setSelectedDays}
                 />
                 <TimePicker time={time} setTime={setTime} />
+                <AmountSelector amount={amount} setAmount={setAmount} />
               </div>
             </div>
             <DialogDrawerFooter>
-              <Button onClick={handleSubmit} className="hover:bg-[#DA8359] text-md h-12">
+              <Button
+                onClick={handleSubmit}
+                className="hover:bg-[#DA8359] text-md h-12"
+              >
                 Save Schedule
               </Button>
               <DialogDrawerClose asChild>
-                <Button variant="outline" className="hover:bg-[#D9D9D9] text-md h-12">
+                <Button
+                  variant="outline"
+                  className="hover:bg-[#D9D9D9] text-md h-12"
+                >
                   Cancel
                 </Button>
               </DialogDrawerClose>

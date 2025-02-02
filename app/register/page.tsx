@@ -18,8 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RegisterSchema } from '@/schema'
-import { useState, useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -30,74 +29,36 @@ export default function RegisterPage() {
     },
   })
 
-  const [isNew, setIsNew] = useState(true)
-  const params = useParams()
   const router = useRouter()
 
-  useEffect(() => {
-    async function fetchData() {
-      const id = params.id?.toString() || undefined
-      if (!id) return
-      setIsNew(false)
-
-      try {
-        const response = await fetch(`http://localhost:5050/api/users/${id}`)
-        if (!response.ok) {
-          const message = `An error has occurred: ${response.statusText}`
-          console.error(message)
-          return
-        }
-
-        const record = await response.json()
-        if (!record) {
-          console.warn(`Record with id ${id} not found`)
-          router.push('/')
-          return
-        }
-  
-        // Set form values using react-hook-form's reset method
-        form.reset(record);
-      } catch (error) {
-        console.error('Error fetching record: ', error)
-      }
-    }
-
-    fetchData()
-  }, [params.id, router, form])
-
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
-    const person = { ...values };
-
-    // Check if the email already exists
     try {
-      let response
-      if (isNew) {
-        // if we are adding a new record we will POST to /api/users
-        response = await fetch('http://localhost:5050/api/users', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(user),
+      const response = await fetch('http://localhost:5050/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+
+      const data = await response.json()
+
+      if (data.message === 'Email already in use') {
+        form.setError('email', {
+          type: 'manual',
+          message: 'This email address is already in use',
         })
       } else {
-        // if we are updating a record we will PATCH to /api/users/:id.
-        response = await fetch(`http://localhost:5050/api/users/${params.id}`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(user),
-        })
-      }
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        router.push('/')
       }
     } catch (error) {
-      console.error('A problem occurred adding or updating a record: ', error)
-    } finally {
-      router.push('/')
+      console.error(error)
+      form.setError('confirmPassword', {
+        type: 'manual',
+        message: 'An error occurred during login',
+      })
+      form.setError('password', { type: 'manual', message: '' })
+      form.setError('email', { type: 'manual', message: '' })
     }
   }
 

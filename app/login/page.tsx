@@ -18,8 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
-import { useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -30,42 +29,11 @@ export default function LoginPage() {
     },
   })
 
-  const params = useParams()
   const router = useRouter()
-
-  useEffect(() => {
-    async function fetchData() {
-      const id = params.id?.toString() || undefined
-      if (!id) return
-
-      try {
-        const response = await fetch(`http://localhost:5050/api/users${id}`)
-        if (!response.ok) {
-          const message = `An error has occurred: ${response.statusText}`
-          console.error(message)
-          return
-        }
-
-        const record = await response.json()
-        if (!record) {
-          console.warn(`Record with id ${id} not found`)
-          router.push('/')
-          return
-        }
-
-        form.reset(record)
-      } catch (error) {
-        console.error('Error fetching record: ', error)
-      }
-    }
-
-    fetchData()
-  }, [params.id, router, form])
 
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
     try {
-      // Send login data to the backend
-      const response = await fetch('http://localhost:5050/api/users/login', {
+      const response = await fetch('http://localhost:5050/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,24 +41,22 @@ export default function LoginPage() {
         body: JSON.stringify(values),
       })
 
-      const data = await response.json()
-
-      if (data.success) {
-        console.log('Login successful:', data)
-        router.push('/')
-      } else {
-        console.error('Login failed:', data.message)
-        form.setError('email', {
+      if (!response.ok) {
+        form.setError('password', {
           type: 'manual',
-          message: data.message || 'Invalid email or password',
+          message: 'Invalid email or password',
         })
+        form.setError('email', { type: 'manual', message: '' })
+      } else {
+        router.push('/')
       }
     } catch (error) {
-      console.error('An error occurred during login:', error)
-      form.setError('email', {
+      console.log(error)
+      form.setError('password', {
         type: 'manual',
         message: 'An error occurred during login',
       })
+      form.setError('email', { type: 'manual', message: '' })
     }
   }
 

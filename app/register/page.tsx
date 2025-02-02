@@ -78,7 +78,7 @@ export default function RegisterPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(person),
+          body: JSON.stringify(user),
         })
       } else {
         // if we are updating a record we will PATCH to /api/users/:id.
@@ -87,7 +87,7 @@ export default function RegisterPage() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(person),
+          body: JSON.stringify(user),
         })
       }
 

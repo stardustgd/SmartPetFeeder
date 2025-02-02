@@ -32,6 +32,23 @@ export const getUserById = async (req, res) => {
   }
 }
 
+// Get a user by email
+export const getUserByEmail = async (req, res) => {
+  try {
+    let collection = db.collection('users')
+    let user = await collection.findOne({ email: req.params.email })
+
+    if (!user) {
+      return res.status(404).send({ message: 'User not found' })
+    } else {
+      return res.status(200).send({ uid: user._id })
+    }
+  } catch (err) {
+    console.error(err)
+    res.status(500).send('Error fetching record by email')
+  }
+}
+
 // Create a new record
 export const createUser = async (req, res) => {
   try {

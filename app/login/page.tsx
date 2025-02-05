@@ -18,8 +18,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
+<<<<<<< HEAD
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+=======
+import { useRouter } from 'next/navigation'
+>>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
 
 export default function LoginPage() {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -30,6 +34,7 @@ export default function LoginPage() {
     },
   })
 
+<<<<<<< HEAD
   const [isNew, setIsNew] = useState(true)
   const params = useParams()
   const router = useRouter()
@@ -68,10 +73,18 @@ export default function LoginPage() {
     try {
       // Send login data to the backend
       const response = await fetch('http://localhost:5050/record/login', {
+=======
+  const router = useRouter()
+
+  async function onSubmit(values: z.infer<typeof LoginSchema>) {
+    try {
+      const response = await fetch('http://localhost:5050/api/auth/login', {
+>>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+<<<<<<< HEAD
         body: JSON.stringify(values), // Send email and password
       });
   
@@ -93,6 +106,27 @@ export default function LoginPage() {
         type: 'manual',
         message: 'An error occurred during login',
       });
+=======
+        body: JSON.stringify(values),
+      })
+
+      if (!response.ok) {
+        form.setError('password', {
+          type: 'manual',
+          message: 'Invalid email or password',
+        })
+        form.setError('email', { type: 'manual', message: '' })
+      } else {
+        router.push('/')
+      }
+    } catch (error) {
+      console.log(error)
+      form.setError('password', {
+        type: 'manual',
+        message: 'An error occurred during login',
+      })
+      form.setError('email', { type: 'manual', message: '' })
+>>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
     }
   }
 

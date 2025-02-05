@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
+import AmountSelector from '@/components/inputs/AmountSelector'
 import CustomCard from '@/components/CustomCard'
 import DaySelector from '@/components/inputs/DaySelector'
 import TimePicker from '@/components/inputs/TimePicker'
@@ -30,26 +31,34 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import ScheduleCard from './ScheduleCard'
 
 export default function ScheduledFeeding() {
   const [selectedDays, setSelectedDays] = useState<string[]>([])
   const [time, setTime] = useState<string>('')
+  const [amount, setAmount] = useState<number>(0)
   const [isOpen, setIsOpen] = useState(false)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const { toast } = useToast()
 
   const handleSubmit = () => {
     if (selectedDays.length === 0 || time === '') {
-      console.log('error')
       toast({
         title: 'Schedule Error',
-        description: 'Please select days and a time for the feeding schedule.',
+        description: 'Please select days and a time for the feeding schedule',
+        variant: 'destructive',
+      })
+    } else if (amount < 1 || amount > 50) {
+      toast({
+        title: 'Schedule Error',
+        description: 'Please enter a valid feeding amount',
         variant: 'destructive',
       })
     } else {
       const newSchedule = {
         days: selectedDays,
         time: time,
+        feedingAmount: amount,
       }
 
       const scheduleJson = JSON.stringify(newSchedule)
@@ -66,6 +75,7 @@ export default function ScheduledFeeding() {
       setIsOpen(false)
       setSelectedDays([])
       setTime('')
+      setAmount(0)
     }
   }
 
@@ -83,14 +93,10 @@ export default function ScheduledFeeding() {
   return (
     <CustomCard cardTitle="Scheduled Feeding">
       <CardContent>
-        <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
-          <span className="flex h-2 w-2 translate-y-1 rounded-full bg[#F7BE7A]" />
-          <div className="space-y-2">
-            <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
-            <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
-            <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
-            <p className="leading-none">9:00 AM, Daily, 1 Serving</p>
-          </div>
+        <div className="flex flex-col gap-4">
+          <ScheduleCard days="every day" time="12:00pm" amount="3 oz" />
+          <ScheduleCard days="every day" time="12:00pm" amount="3 oz" />
+          <ScheduleCard days="every day" time="12:00pm" amount="3 oz" />
         </div>
       </CardContent>
       <CardFooter>
@@ -114,14 +120,21 @@ export default function ScheduledFeeding() {
                   setSelectedDays={setSelectedDays}
                 />
                 <TimePicker time={time} setTime={setTime} />
+                <AmountSelector amount={amount} setAmount={setAmount} />
               </div>
             </div>
             <DialogDrawerFooter>
-              <Button onClick={handleSubmit} className="hover:bg-[#DA8359] text-md h-12">
+              <Button
+                onClick={handleSubmit}
+                className="hover:bg-[#DA8359] text-md h-12"
+              >
                 Save Schedule
               </Button>
               <DialogDrawerClose asChild>
-                <Button variant="outline" className="hover:bg-[#D9D9D9] text-md h-12">
+                <Button
+                  variant="outline"
+                  className="hover:bg-[#D9D9D9] text-md h-12"
+                >
                   Cancel
                 </Button>
               </DialogDrawerClose>

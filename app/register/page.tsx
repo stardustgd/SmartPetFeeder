@@ -18,8 +18,12 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RegisterSchema } from '@/schema'
+<<<<<<< HEAD
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
+=======
+import { useRouter } from 'next/navigation'
+>>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
 
 export default function RegisterPage() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -30,6 +34,7 @@ export default function RegisterPage() {
     },
   })
 
+<<<<<<< HEAD
   const [isNew, setIsNew] = useState(true)
   const params = useParams()
   const router = useRouter()
@@ -128,6 +133,38 @@ export default function RegisterPage() {
       console.error('A problem occurred adding or updating a record: ', error)
     } finally {
       router.push('/')
+=======
+  const router = useRouter()
+
+  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+    try {
+      const response = await fetch('http://localhost:5050/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+
+      const data = await response.json()
+
+      if (data.message === 'Email already in use') {
+        form.setError('email', {
+          type: 'manual',
+          message: 'This email address is already in use',
+        })
+      } else {
+        router.push('/')
+      }
+    } catch (error) {
+      console.error(error)
+      form.setError('confirmPassword', {
+        type: 'manual',
+        message: 'An error occurred during login',
+      })
+      form.setError('password', { type: 'manual', message: '' })
+      form.setError('email', { type: 'manual', message: '' })
+>>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
     }
   }
 

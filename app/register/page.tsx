@@ -49,7 +49,7 @@ export default function RegisterPage() {
           message: 'This email address is already in use',
         })
       } else {
-        router.push('/')
+        router.push('/login')
       }
     } catch (error) {
       console.error(error)

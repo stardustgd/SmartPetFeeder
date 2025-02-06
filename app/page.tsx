@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 import NavBar from '@/components/NavBar'
@@ -9,6 +10,34 @@ import FeederPreferences from '@/components/feeding/FeederPreferences'
 export default function Home() {
   const [isClicked, setIsClicked] = useState(false)
   const [showGif, setShowGif] = useState(true)
+  const router = useRouter()
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(
+          'http://localhost:5050/api/auth/current-user',
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          }
+        )
+
+        const data = await response.json()
+        console.log(data)
+
+        if (!data.loggedIn) {
+          router.push('/login')
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchUser()
+  }, [])
 
   const handleClick = () => {
     setIsClicked(true)
@@ -17,7 +46,6 @@ export default function Home() {
       setShowGif(false)
     }, 2100)
 
-    // Send to backend when implemented
     console.log('Feeder Clicked')
   }
 

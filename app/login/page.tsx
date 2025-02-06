@@ -18,14 +18,11 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
-<<<<<<< HEAD
-import { useState, useEffect } from 'react'
-import { useRouter, useParams } from 'next/navigation'
-=======
 import { useRouter } from 'next/navigation'
->>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
+import { useState, useEffect } from 'react'
 
 export default function LoginPage() {
+  const [accessToken, setAccessToken] = useState('')
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -34,100 +31,117 @@ export default function LoginPage() {
     },
   })
 
-<<<<<<< HEAD
-  const [isNew, setIsNew] = useState(true)
-  const params = useParams()
   const router = useRouter()
 
   useEffect(() => {
-    async function fetchData() {
-      const id = params.id?.toString() || undefined
-      if (!id) return
-      setIsNew(false)
+    if (accessToken) {
+      console.log('Access Token Updated:', accessToken)
+      fetchUser()
+    }
+  }, [accessToken])
 
-      try {
-        const response = await fetch(`http://localhost:5050/record/${id}`)
-        if (!response.ok) {
-          const message = `An error has occurred: ${response.statusText}`
-          console.error(message)
-          return
-        }
+  const login = async (email: string, password: string) => {
+    const response = await fetch('http://localhost:5050/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, password }),
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    })
 
-        const record = await response.json()
-        if (!record) {
-          console.warn(`Record with id ${id} not found`)
-          router.push('/')
-          return
-        }
+    const data = await response.json()
+    console.log('Login Response:', data)
 
-        form.reset(record)
-      } catch (error) {
-        console.error('Error fetching record: ', error)
-      }
+    if (!data.accessToken) {
+      console.error('No access token received.')
+      return false
     }
 
-    fetchData()
-  }, [params.id, router, form])
+    setAccessToken(data.accessToken)
+    console.log('Access Token Set:', accessToken)
+    return true
+  }
 
-  async function onSubmit(values: z.infer<typeof LoginSchema>) {
-    try {
-      // Send login data to the backend
-      const response = await fetch('http://localhost:5050/record/login', {
-=======
-  const router = useRouter()
+  const fetchUser = async () => {
+    if (!accessToken) {
+      console.log('No access token available.')
+      return
+    }
 
-  async function onSubmit(values: z.infer<typeof LoginSchema>) {
-    try {
-      const response = await fetch('http://localhost:5050/api/auth/login', {
->>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
-        method: 'POST',
+    console.log('Fetching user with token:', accessToken)
+
+    const response = await fetch(
+      'http://localhost:5050/api/auth/current-user',
+      {
+        method: 'GET',
         headers: {
+          Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-<<<<<<< HEAD
-        body: JSON.stringify(values), // Send email and password
-      });
-  
-      const data = await response.json();
-  
-      if (data.success) {
-        console.log('Login successful:', data);
-        router.push('/'); 
-      } else {
-        console.error('Login failed:', data.message);
-        form.setError('email', {
-          type: 'manual',
-          message: data.message || 'Invalid email or password',
-        });
+        credentials: 'include',
       }
-    } catch (error) {
-      console.error('An error occurred during login:', error);
-      form.setError('email', {
-        type: 'manual',
-        message: 'An error occurred during login',
-      });
-=======
-        body: JSON.stringify(values),
+    )
+
+    const data = await response.json()
+    console.log('User Response:', data)
+
+    if (!data.loggedIn) {
+      console.log('User is not logged in.')
+      await refreshAccessToken()
+    } else {
+      console.log('User logged in:', data.user)
+    }
+  }
+
+  const refreshAccessToken = async () => {
+    try {
+      const response = await fetch('http://localhost:5050/api/auth/refresh', {
+        method: 'POST',
+        credentials: 'include',
       })
 
-      if (!response.ok) {
-        form.setError('password', {
-          type: 'manual',
-          message: 'Invalid email or password',
-        })
-        form.setError('email', { type: 'manual', message: '' })
-      } else {
-        router.push('/')
+      if (response.status === 403) {
+        console.log('Refresh token invalid, user must log in again.')
+        return logout()
+      }
+
+      const data = await response.json()
+      if (data.accessToken) {
+        setAccessToken(data.accessToken)
+        console.log('Access token refreshed.')
       }
     } catch (error) {
-      console.log(error)
+      console.error('Error refreshing access token:', error)
+    }
+  }
+
+  const logout = async () => {
+    try {
+      await fetch('http://localhost:5050/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+
+      setAccessToken('')
+      console.log('User logged out.')
+      router.push('/login')
+    } catch (error) {
+      console.error('Error logging out:', error)
+    }
+  }
+
+  async function onSubmit(values: z.infer<typeof LoginSchema>) {
+    const success = await login(values.email, values.password)
+
+    if (!success) {
       form.setError('password', {
         type: 'manual',
-        message: 'An error occurred during login',
+        message: 'Invalid email or password',
       })
-      form.setError('email', { type: 'manual', message: '' })
->>>>>>> 750f6a12c497ee8ea4b778df8c90c6e81a48bb00
+      return
     }
+
+    console.log('Login successful, fetching user data...')
+    router.push('/')
   }
 
   return (

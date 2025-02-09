@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import useAuth from '@/hooks/useAuth'
 import Image from 'next/image'
 
 import NavBar from '@/components/NavBar'
@@ -10,34 +10,12 @@ import FeederPreferences from '@/components/feeding/FeederPreferences'
 export default function Home() {
   const [isClicked, setIsClicked] = useState(false)
   const [showGif, setShowGif] = useState(true)
-  const router = useRouter()
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch(
-          'http://localhost:5050/api/auth/current-user',
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-          }
-        )
+  const { user } = useAuth()
 
-        const data = await response.json()
-        console.log(data)
-
-        if (!data.loggedIn) {
-          router.push('/login')
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    fetchUser()
-  }, [])
+  if (user) {
+    console.log('In root page: ' + user.id)
+  }
 
   const handleClick = () => {
     setIsClicked(true)

@@ -11,11 +11,7 @@ export default function Home() {
   const [isClicked, setIsClicked] = useState(false)
   const [showGif, setShowGif] = useState(true)
 
-  const { user } = useAuth()
-
-  if (user) {
-    console.log('In root page: ' + user.id)
-  }
+  useAuth()
 
   const handleClick = () => {
     setIsClicked(true)

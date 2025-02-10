@@ -33,9 +33,9 @@ export default function LoginPage() {
 
   const router = useRouter()
 
+  // useAuth instead
   useEffect(() => {
     if (accessToken) {
-      console.log('Access Token Updated:', accessToken)
       fetchUser()
     }
   }, [accessToken])
@@ -49,7 +49,6 @@ export default function LoginPage() {
     })
 
     const data = await response.json()
-    console.log('Login Response:', data)
 
     if (!data.accessToken) {
       console.error('No access token received.')
@@ -57,17 +56,13 @@ export default function LoginPage() {
     }
 
     setAccessToken(data.accessToken)
-    console.log('Access Token Set:', accessToken)
     return true
   }
 
   const fetchUser = async () => {
     if (!accessToken) {
-      console.log('No access token available.')
       return
     }
-
-    console.log('Fetching user with token:', accessToken)
 
     const response = await fetch(
       'http://localhost:5050/api/auth/current-user',
@@ -82,13 +77,10 @@ export default function LoginPage() {
     )
 
     const data = await response.json()
-    console.log('User Response:', data)
 
     if (!data.loggedIn) {
-      console.log('User is not logged in.')
       await refreshAccessToken()
     } else {
-      console.log('User logged in:', data.user)
     }
   }
 
@@ -100,14 +92,12 @@ export default function LoginPage() {
       })
 
       if (response.status === 403) {
-        console.log('Refresh token invalid, user must log in again.')
         return logout()
       }
 
       const data = await response.json()
       if (data.accessToken) {
         setAccessToken(data.accessToken)
-        console.log('Access token refreshed.')
       }
     } catch (error) {
       console.error('Error refreshing access token:', error)
@@ -122,7 +112,6 @@ export default function LoginPage() {
       })
 
       setAccessToken('')
-      console.log('User logged out.')
       router.push('/login')
     } catch (error) {
       console.error('Error logging out:', error)
@@ -140,7 +129,6 @@ export default function LoginPage() {
       return
     }
 
-    console.log('Login successful, fetching user data...')
     router.push('/')
   }
 

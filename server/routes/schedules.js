@@ -9,10 +9,10 @@ import {
 
 const router = express.Router()
 
-router.get('/', getAllSchedules) 
-router.get('/user/:email', getSchedulesByEmail) 
-router.post('/', createSchedule) 
-router.put('/user/:email', updateScheduleByEmail) 
-router.delete('/user/:email', deleteScheduleByEmail) 
+router.get('/', getAllSchedules)
+router.get('/user/:email', getSchedulesByEmail)
+router.post('/', createSchedule)
+router.put('/user/:email', updateScheduleByEmail)
+router.delete('/user/:email', deleteScheduleByEmail)
 
 export default router

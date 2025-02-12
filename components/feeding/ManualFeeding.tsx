@@ -34,40 +34,35 @@ import useAuth from '@/hooks/useAuth'
 export default function ManualFeeding() {
   const [amount, setAmount] = useState<number>(0)
   const [isOpen, setIsOpen] = useState(false)
-  const [userManualFeeding, setUserManualFeeding] = useState<any>(null)
+  const [userManualFeeding, setUserManualFeeding] = useState<number>(-1)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const { toast } = useToast()
   const { user } = useAuth()
 
   useEffect(() => {
-    if (user?.email) {
-      const fetchManualFeeding = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:5050/api/manualFeedings/user/${user?.email}`
-          )
-
-          if (response.ok) {
-            const data = await response.json()
-            setUserManualFeeding(data)
-            setAmount(data?.manualFeedingAmount || 0)
-          } else {
-            setUserManualFeeding(null)
-            setAmount(0)
+    if (user) {
+      fetch(`http://localhost:5050/api/manualFeedings/user/${user.email}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to load manual feeding data')
           }
-        } catch (error) {
-          console.error('Error fetching manual feeding:', error)
+
+          return response.json()
+        })
+        .then((data) => {
+          setUserManualFeeding(data.manualFeedingAmount)
+          setAmount(data.manualFeedingAmount)
+        })
+        .catch((error) => {
+          console.error(error)
           toast({
             title: 'Error',
-            description: 'Failed to load manual feeding data.',
+            description: error.message,
             variant: 'destructive',
           })
-        }
-      }
-
-      fetchManualFeeding()
+        })
     }
-  }, [user?.email, toast])
+  }, [user, toast])
 
   const handleSubmit = async () => {
     if (amount < 1 || amount > 50) {
@@ -137,7 +132,7 @@ export default function ManualFeeding() {
         })
       }
 
-      setUserManualFeeding({ manualFeedingAmount: amount })
+      setUserManualFeeding(amount)
     } catch (error) {
       console.error('Error:', error)
       toast({
@@ -166,14 +161,10 @@ export default function ManualFeeding() {
     <CustomCard cardTitle="Manual Feeding">
       <CardContent>
         <div className="flex flex-col gap-4">
-          {userManualFeeding ? (
-            <div>
-              <div className="text-2xl">
-                {userManualFeeding.manualFeedingAmount} oz
-              </div>
-            </div>
+          {userManualFeeding > 0 ? (
+            <h1 className="text-2xl">{userManualFeeding} oz</h1>
           ) : (
-            <div className="text-gray-500">No manual feeding set.</div>
+            <p className="text-gray-500">No manual feeding set.</p>
           )}
         </div>
       </CardContent>

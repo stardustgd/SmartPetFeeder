@@ -46,88 +46,63 @@ export default function ScheduledFeeding() {
   const { user } = useAuth()
 
   useEffect(() => {
-    if (user?.email) {
-      const fetchSchedules = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:5050/api/schedules/user/${user?.email}`
-          )
-
-          if (response.ok) {
-            const data = await response.json()
-            setUserSchedules(data[0]?.schedule || null)
-          } else {
-            setUserSchedules([])
+    if (user) {
+      fetch(`http://localhost:5050/api/schedules/user/${user.email}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to load user schedules')
           }
-        } catch (error) {
-          console.error('Error fetching schedules:', error)
+
+          return response.json()
+        })
+        .then((data) => {
+          console.log(data[0].schedule)
+          setUserSchedules(data[0].schedule)
+        })
+        .catch((error) => {
           toast({
             title: 'Error',
-            description: 'Failed to load schedules.',
+            description: error,
             variant: 'destructive',
           })
-        }
-      }
-
-      fetchSchedules()
+        })
     }
-  }, [user?.email, toast])
+  }, [user, toast])
 
   const handleSubmit = async () => {
-    if (selectedDays.length === 0 || time === '') {
-      toast({
-        title: 'Schedule Error',
-        description: 'Please select days and a time for the feeding schedule',
-        variant: 'destructive',
-      })
-      return
-    }
-
-    if (amount < 1 || amount > 50) {
-      toast({
-        title: 'Schedule Error',
-        description: 'Please enter a valid feeding amount',
-        variant: 'destructive',
-      })
-      return
-    }
-
-    const newEntry = {
-      days: selectedDays,
-      time: time,
-      feedingAmount: amount,
-    }
-
     try {
+      if (selectedDays.length === 0 || time === '') {
+        throw new Error(
+          'Please select days and a time for the feeding schedule'
+        )
+      }
+
+      if (amount < 1 || amount > 50) {
+        throw new Error('Please enter a valid feeding amount')
+      }
+
+      const newEntry = {
+        days: selectedDays,
+        time: time,
+        feedingAmount: amount,
+      }
+
       const response = await fetch(
         `http://localhost:5050/api/schedules/user/${user?.email}`
       )
 
       if (response.status === 404) {
-        const createResponse = await fetch(
-          'http://localhost:5050/api/schedules',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              user: user?.email,
-              schedule: [newEntry],
-            }),
+        fetch('http://localhost:5050/api/schedules', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user: user?.email,
+            schedule: [newEntry],
+          }),
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to create schedule')
           }
-        )
-
-        if (!createResponse.ok) {
-          toast({
-            title: 'Schedule Error',
-            description: 'Failed to create schedule',
-            variant: 'destructive',
-          })
-          return
-        }
-
-        toast({
-          title: 'Schedule Created',
-          description: 'A new feeding schedule has been added.',
         })
       } else {
         const userSchedules = await response.json()
@@ -135,6 +110,8 @@ export default function ScheduledFeeding() {
         let isDuplicate = false
         for (let i = 0; i < userSchedules[0].schedule.length; i++) {
           const schedule = userSchedules[0].schedule[i]
+
+          console.log(schedule)
 
           if (
             JSON.stringify(schedule.days.sort()) ===
@@ -147,99 +124,77 @@ export default function ScheduledFeeding() {
         }
 
         if (isDuplicate) {
-          toast({
-            title: 'Duplicate Schedule',
-            description:
-              'A feeding schedule for this day and time already exists.',
-            variant: 'destructive',
-          })
-          return
+          throw new Error(
+            'A feeding schedule for this day and time already exists'
+          )
         }
 
         const updatedSchedule = [...userSchedules[0].schedule, newEntry]
 
-        const updateResponse = await fetch(
-          `http://localhost:5050/api/schedules/user/${user?.email}`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ schedule: updatedSchedule }),
+        fetch(`http://localhost:5050/api/schedules/user/${user?.email}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ schedule: updatedSchedule }),
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to update schedule')
           }
-        )
-
-        if (!updateResponse.ok) {
-          toast({
-            title: 'Schedule Error',
-            description: 'Failed to update schedule',
-            variant: 'destructive',
-          })
-          return
-        }
-
-        toast({
-          title: 'Schedule Updated',
-          description: 'Your feeding schedule has been updated.',
         })
       }
 
-      const updatedSchedulesResponse = await fetch(
-        `http://localhost:5050/api/schedules/user/${user?.email}`
-      )
-      if (updatedSchedulesResponse.ok) {
-        const updatedSchedulesData = await updatedSchedulesResponse.json()
-        setUserSchedules(updatedSchedulesData[0]?.schedule || [])
-      }
-    } catch (err) {
-      console.error('Error:', err)
+      toast({
+        title: 'Schedule Updated',
+        description: 'Your feeding schedule has been updated.',
+      })
+
+      // After adding new schedule, append it to userSchedules and close menu
+      setUserSchedules((prev) => [...prev, newEntry])
+      setIsOpen(false)
+      setSelectedDays([])
+      setTime('')
+      setAmount(0)
+    } catch (error) {
+      console.error('Error:', error)
       toast({
         title: 'Error',
-        description: 'Something went wrong while saving the schedule.',
+        description: (error as Error).message,
         variant: 'destructive',
       })
     }
-
-    setIsOpen(false)
-    setSelectedDays([])
-    setTime('')
-    setAmount(0)
   }
 
   const handleDeletion = async (index: number) => {
-    try {
-      const updatedSchedules = [...userSchedules]
-      updatedSchedules.splice(index, 1)
-
-      const response = await fetch(
-        `http://localhost:5050/api/schedules/user/${user?.email}`,
-        {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ schedule: updatedSchedules }),
-        }
-      )
-
-      if (!response.ok) {
-        toast({
-          title: 'Deletion Failed',
-          description: 'Failed to delete the schedule.',
-          variant: 'destructive',
-        })
-        return
-      }
-
-      setUserSchedules(updatedSchedules)
-      toast({
-        title: 'Schedule Deleted',
-        description: 'Feeding schedule has been deleted.',
-      })
-    } catch (error) {
-      console.error('Error deleting schedule:', error)
+    if (!user) {
       toast({
         title: 'Error',
-        description: 'Failed to delete schedule.',
+        description: 'User not found',
         variant: 'destructive',
       })
+      return
     }
+
+    const updatedSchedules = [...userSchedules]
+    updatedSchedules.splice(index, 1)
+
+    fetch(`http://localhost:5050/api/schedules/user/${user.email}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ schedule: updatedSchedules }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to delete the schedule')
+        }
+
+        setUserSchedules(updatedSchedules)
+      })
+      .catch((error) => {
+        toast({
+          title: 'Error',
+          description: error.message,
+          variant: 'destructive',
+        })
+      })
   }
 
   const DialogDrawer = isDesktop ? Dialog : Drawer
@@ -257,7 +212,7 @@ export default function ScheduledFeeding() {
     <CustomCard cardTitle="Scheduled Feeding">
       <CardContent>
         <div className="flex flex-col gap-4">
-          {userSchedules?.map((schedule: any, index: number) => (
+          {userSchedules?.map((schedule: Schedule, index: number) => (
             <ScheduleCard
               key={index}
               days={schedule.days}

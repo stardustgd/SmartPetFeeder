@@ -42,57 +42,52 @@ export default function FeederPreferences() {
   const { toast } = useToast()
   const { user } = useAuth()
 
+  // Get user schedules and update userSchedules
   useEffect(() => {
-    if (user?.email) {
-      const fetchSchedules = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:5050/api/schedules/user/${user.email}`
-          )
-          if (response.ok) {
-            const data = await response.json()
-            setUserSchedules(data[0]?.schedule || [])
-          } else {
-            setUserSchedules([])
+    if (user) {
+      fetch(`http://localhost:5050/api/schedules/user/${user.email}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to load schedules')
           }
-        } catch (error) {
-          console.error('Error fetching schedules:', error)
+          return response.json()
+        })
+        .then((response) => {
+          setUserSchedules(response[0].schedule || [])
+        })
+        .catch((error) => {
           toast({
             title: 'Error',
-            description: 'Failed to load schedules.',
+            description: error.message,
             variant: 'destructive',
           })
-        }
-      }
-      fetchSchedules()
+        })
     }
-  }, [user?.email, toast])
+  }, [user, toast])
 
+  // Get manual feeding and update manualFeedingAmount
   useEffect(() => {
-    if (user?.email) {
-      const fetchManualFeedingAmount = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:5050/api/manualFeedings/user/${user.email}`
-          )
-          if (response.ok) {
-            const data = await response.json()
-            setManualFeedingAmount(data.manualFeedingAmount || 'Not set.')
-          } else {
-            setManualFeedingAmount('Not set.')
+    if (user) {
+      fetch(`http://localhost:5050/api/manualFeedings/user/${user.email}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to load manual feeding amount')
           }
-        } catch (error) {
-          console.error('Error fetching manual feeding amount:', error)
+
+          return response.json()
+        })
+        .then((response) => {
+          setManualFeedingAmount(response.manualFeedingAmount || 'Not set')
+        })
+        .catch((error) => {
           toast({
             title: 'Error',
-            description: 'Failed to load manual feeding amount.',
+            description: error.message,
             variant: 'destructive',
           })
-        }
-      }
-      fetchManualFeedingAmount()
+        })
     }
-  }, [user?.email, toast])
+  }, [user, toast])
 
   const DialogDrawer = isDesktop ? Dialog : Drawer
   const DialogDrawerTrigger = isDesktop ? DialogTrigger : DrawerTrigger
@@ -124,7 +119,7 @@ export default function FeederPreferences() {
             <div className="flex flex-col p-4 gap-5">
               <CustomCard
                 cardTitle="Manual Feeding Amount"
-                cardDescription={manualFeedingAmount || 'Loading...'}
+                cardDescription={`${manualFeedingAmount} oz`}
               />
               <CustomCard cardTitle="Scheduled Feeding">
                 <CardContent className="max-h-40 overflow-y-auto">
@@ -138,6 +133,7 @@ export default function FeederPreferences() {
                           {schedule.days.length === 7
                             ? 'Every Day'
                             : capitalizeDays(sortDaysOfWeek(schedule.days))}
+                          <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
                         </p>
                       ))}
                     </div>

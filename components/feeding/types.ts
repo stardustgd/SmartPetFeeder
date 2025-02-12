@@ -3,3 +3,8 @@ export type Schedule = {
   time: string
   feedingAmount: number
 }
+
+export type ManualFeeding = {
+  user: string
+  manualFeedingAmount: number
+}

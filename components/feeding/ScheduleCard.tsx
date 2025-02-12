@@ -26,7 +26,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import { convertToAMPM, capitalizeDays } from '@/lib/utils'
+import { convertToAMPM, capitalizeDays, sortDaysOfWeek } from '@/lib/utils'
 
 type ScheduleCardProps = {
   days: string[]
@@ -45,20 +45,6 @@ export default function ScheduleCard({
 }: ScheduleCardProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const [isOpen, setIsOpen] = useState(false)
-
-  const sortDaysOfWeek = (days: string[]) => {
-    const dayOrder = [
-      'sunday',
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday',
-    ]
-
-    return days.sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
-  }
 
   const formattedDays =
     days.length === 7 ? 'Every Day' : capitalizeDays(sortDaysOfWeek(days))

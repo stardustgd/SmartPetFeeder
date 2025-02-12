@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import useAuth from '@/hooks/useAuth'
 
 export default function LoginPage() {
   const [accessToken, setAccessToken] = useState('')
@@ -32,13 +33,18 @@ export default function LoginPage() {
   })
 
   const router = useRouter()
+  const { user } = useAuth()
 
   // useAuth instead
   useEffect(() => {
+    if (user) {
+      router.push('/')
+    }
+
     if (accessToken) {
       fetchUser()
     }
-  }, [accessToken])
+  }, [accessToken, user, router])
 
   const login = async (email: string, password: string) => {
     const response = await fetch('http://localhost:5050/api/auth/login', {

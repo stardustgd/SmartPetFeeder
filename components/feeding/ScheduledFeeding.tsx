@@ -170,7 +170,7 @@ export default function ScheduledFeeding() {
     const updatedSchedules = [...userSchedules]
     updatedSchedules.splice(index, 1)
 
-    fetch(`http://localhost:5050/api/schedules/user/${user.email}`, {
+    fetch(`/api/schedules/user/${user.email}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ schedule: updatedSchedules }),

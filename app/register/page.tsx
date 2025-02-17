@@ -33,7 +33,7 @@ export default function RegisterPage() {
 
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     try {
-      const response = await fetch('http://localhost:5050/api/auth/register', {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

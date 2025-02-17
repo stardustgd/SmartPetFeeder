@@ -45,7 +45,7 @@ export default function FeederPreferences() {
   // Get user schedules and update userSchedules
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5050/api/schedules/user/${user.email}`)
+      fetch(`/api/schedules/user/${user.email}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to load schedules')
@@ -68,7 +68,7 @@ export default function FeederPreferences() {
   // Get manual feeding and update manualFeedingAmount
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5050/api/manualFeedings/user/${user.email}`)
+      fetch(`/api/manualFeedings/user/${user.email}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to load manual feeding amount')

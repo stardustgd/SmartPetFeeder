@@ -12,10 +12,7 @@ const app = express()
 app.use(
   cors({
     credentials: true,
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? 'https://smart-pet-feeder-git-backend-integration-stardustgds-projects.vercel.app'
-        : 'http://localhost:3000',
+    origin: '*',
   })
 )
 app.use(express.json())

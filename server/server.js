@@ -9,7 +9,15 @@ dotenv.config()
 const PORT = process.env.PORT || 5050
 const app = express()
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
+app.use(
+  cors({
+    credentials: true,
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? 'https://smart-pet-feeder-git-backend-integration-stardustgds-projects.vercel.app'
+        : 'http://localhost:3000',
+  })
+)
 app.use(express.json())
 app.use(cookieParser())
 

@@ -10,7 +10,12 @@
       "use": "@vercel/next"
     }
   ],
-  "routes": [{ "src": "/api/(.*)", "dest": "server/server.js" }],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server/server.js"
+    }
+  ],
   "env": {
     "NODE_ENV": "production"
   }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import useAuth from '@/hooks/useAuth'
 import Image from 'next/image'
 
 import NavBar from '@/components/NavBar'
@@ -10,15 +11,14 @@ export default function Home() {
   const [isClicked, setIsClicked] = useState(false)
   const [showGif, setShowGif] = useState(true)
 
+  useAuth()
+
   const handleClick = () => {
     setIsClicked(true)
 
     setTimeout(() => {
       setShowGif(false)
     }, 2100)
-
-    // Send to backend when implemented
-    console.log('Feeder Clicked')
   }
 
   return (

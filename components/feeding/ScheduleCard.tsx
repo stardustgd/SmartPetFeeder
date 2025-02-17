@@ -2,7 +2,6 @@
 
 import { IoTrash } from 'react-icons/io5'
 import { useState } from 'react'
-import { useToast } from '@/hooks/use-toast'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
 import { Button } from '@/components/ui/button'
@@ -27,32 +26,28 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
+import { convertToAMPM, capitalizeDays, sortDaysOfWeek } from '@/lib/utils'
 
 type ScheduleCardProps = {
-  days: string
+  days: string[]
   time: string
   amount: string
+  idx: number
+  handleDeletion: (index: number) => void
 }
 
 export default function ScheduleCard({
   days,
   time,
   amount,
+  idx,
+  handleDeletion,
 }: ScheduleCardProps) {
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const [isOpen, setIsOpen] = useState(false)
-  const { toast } = useToast()
 
-  const handleDeletion = () => {
-    toast({
-      title: 'Schedule Deleted',
-      description: 'Feeding schedule has been deleted',
-    })
-
-    // Handle deletion in backend here
-
-    setIsOpen(false)
-  }
+  const formattedDays =
+    days.length === 7 ? 'Every Day' : capitalizeDays(sortDaysOfWeek(days))
 
   const DialogDrawer = isDesktop ? Dialog : Drawer
   const DialogDrawerTrigger = isDesktop ? DialogTrigger : DrawerTrigger
@@ -69,9 +64,11 @@ export default function ScheduleCard({
     <Card className="w-full max-w-3xl mx-auto">
       <div className="flex flex-row items-center justify-between py-6 px-4">
         <div className="flex flex-col">
-          <h1 className="text-2xl">{time}</h1>
+          <h1 className="text-2xl">{convertToAMPM(time)}</h1>
           <h1>
-            {amount}, {days}
+            {`${amount}.`}
+            <br />
+            {`${formattedDays}.`}
           </h1>
         </div>
         <DialogDrawer open={isOpen} onOpenChange={setIsOpen}>
@@ -91,7 +88,7 @@ export default function ScheduleCard({
               <div className="md:pt-8">
                 <DialogDrawerFooter>
                   <Button
-                    onClick={handleDeletion}
+                    onClick={() => handleDeletion(idx)}
                     className="bg-[#da5959] hover:bg-[#bf4949] text-md h-12"
                   >
                     Delete Schedule

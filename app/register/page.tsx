@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { RegisterSchema } from '@/schema'
+import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
@@ -28,8 +29,37 @@ export default function RegisterPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof RegisterSchema>) {
-    console.log(values)
+  const router = useRouter()
+
+  async function onSubmit(values: z.infer<typeof RegisterSchema>) {
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      })
+
+      const data = await response.json()
+
+      if (data.message === 'Email already in use') {
+        form.setError('email', {
+          type: 'manual',
+          message: 'This email address is already in use',
+        })
+      } else {
+        router.push('/login')
+      }
+    } catch (error) {
+      console.error(error)
+      form.setError('confirmPassword', {
+        type: 'manual',
+        message: 'An error occurred during login',
+      })
+      form.setError('password', { type: 'manual', message: '' })
+      form.setError('email', { type: 'manual', message: '' })
+    }
   }
 
   return (

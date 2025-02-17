@@ -1,6 +1,5 @@
 import express from 'express'
 import {
-  getAllUsers,
   getUserById,
   getUserByEmail,
   updateUser,
@@ -9,7 +8,6 @@ import {
 
 const router = express.Router()
 
-router.get('/', getAllUsers)
 router.get('/:id', getUserById)
 router.get('/email/:email', getUserByEmail)
 router.patch('/:id', updateUser)

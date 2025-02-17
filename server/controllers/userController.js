@@ -1,18 +1,6 @@
 import { ObjectId } from 'mongodb'
 import db from '../db/connection.js'
 
-// Get all users
-export const getAllUsers = async (_req, res) => {
-  try {
-    let collection = db.collection('users')
-    let results = await collection.find({}).toArray()
-    res.status(200).send(results)
-  } catch (err) {
-    console.error(err)
-    res.status(500).send('Error fetching records')
-  }
-}
-
 // Get a single user by ID
 export const getUserById = async (req, res) => {
   try {

@@ -1,6 +1,5 @@
 import express from 'express'
 import {
-  getAllSchedules,
   getSchedulesByEmail,
   createSchedule,
   updateScheduleByEmail,
@@ -9,7 +8,6 @@ import {
 
 const router = express.Router()
 
-router.get('/', getAllSchedules)
 router.get('/user/:email', getSchedulesByEmail)
 router.post('/', createSchedule)
 router.put('/user/:email', updateScheduleByEmail)

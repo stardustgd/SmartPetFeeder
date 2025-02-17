@@ -1,15 +1,5 @@
 import db from '../db/connection.js'
 
-export const getAllManualFeedings = async (_req, res) => {
-  try {
-    const collection = db.collection('manualFeedings')
-    const feedings = await collection.find().toArray()
-    res.status(200).json(feedings)
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch manual feedings' })
-  }
-}
-
 export const getManualFeedingsByEmail = async (req, res) => {
   try {
     const { email } = req.params

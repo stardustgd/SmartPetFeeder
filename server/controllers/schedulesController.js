@@ -1,16 +1,5 @@
 import db from '../db/connection.js'
 
-export const getAllSchedules = async (_req, res) => {
-  try {
-    const collection = db.collection('schedules')
-    const results = await collection.find({}).toArray()
-    res.status(200).send(results)
-  } catch (err) {
-    console.error(err)
-    res.status(500).send('Error fetching schedules')
-  }
-}
-
 export const getSchedulesByEmail = async (req, res) => {
   try {
     const collection = db.collection('schedules')

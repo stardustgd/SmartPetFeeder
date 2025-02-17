@@ -1,6 +1,5 @@
 import express from 'express'
 import {
-  getAllManualFeedings,
   getManualFeedingsByEmail,
   createManualFeeding,
   updateManualFeeding,
@@ -9,7 +8,6 @@ import {
 
 const router = express.Router()
 
-router.get('/', getAllManualFeedings)
 router.get('/user/:email', getManualFeedingsByEmail)
 router.post('/', createManualFeeding)
 router.put('/user/:email', updateManualFeeding)

@@ -47,7 +47,7 @@ export default function LoginPage() {
   }, [accessToken, user, router])
 
   const login = async (email: string, password: string) => {
-    const response = await fetch('http://localhost:5050/api/auth/login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
       headers: { 'Content-Type': 'application/json' },
@@ -70,17 +70,14 @@ export default function LoginPage() {
       return
     }
 
-    const response = await fetch(
-      'http://localhost:5050/api/auth/current-user',
-      {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      }
-    )
+    const response = await fetch('/api/auth/current-user', {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
 
     const data = await response.json()
 
@@ -92,7 +89,7 @@ export default function LoginPage() {
 
   const refreshAccessToken = async () => {
     try {
-      const response = await fetch('http://localhost:5050/api/auth/refresh', {
+      const response = await fetch('/api/auth/refresh', {
         method: 'POST',
         credentials: 'include',
       })
@@ -112,7 +109,7 @@ export default function LoginPage() {
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:5050/api/auth/logout', {
+      await fetch('/api/auth/logout', {
         method: 'POST',
         credentials: 'include',
       })

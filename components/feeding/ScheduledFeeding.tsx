@@ -47,7 +47,7 @@ export default function ScheduledFeeding() {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5050/api/schedules/user/${user.email}`)
+      fetch(`/api/schedules/user/${user.email}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to load user schedules')
@@ -87,12 +87,10 @@ export default function ScheduledFeeding() {
         feedingAmount: amount,
       }
 
-      const response = await fetch(
-        `http://localhost:5050/api/schedules/user/${user?.email}`
-      )
+      const response = await fetch(`/api/schedules/user/${user?.email}`)
 
       if (response.status === 404) {
-        fetch('http://localhost:5050/api/schedules', {
+        fetch('/api/schedules', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -131,7 +129,7 @@ export default function ScheduledFeeding() {
 
         const updatedSchedule = [...userSchedules[0].schedule, newEntry]
 
-        fetch(`http://localhost:5050/api/schedules/user/${user?.email}`, {
+        fetch(`/api/schedules/user/${user?.email}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ schedule: updatedSchedule }),

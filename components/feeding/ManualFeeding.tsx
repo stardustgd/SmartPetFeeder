@@ -41,7 +41,7 @@ export default function ManualFeeding() {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:5050/api/manualFeedings/user/${user.email}`)
+      fetch(`/api/manualFeedings/user/${user.email}`)
         .then((response) => {
           if (!response.ok) {
             throw new Error('Failed to load manual feeding data')
@@ -80,19 +80,14 @@ export default function ManualFeeding() {
     }
 
     try {
-      const response = await fetch(
-        `http://localhost:5050/api/manualFeedings/user/${user?.email}`
-      )
+      const response = await fetch(`/api/manualFeedings/user/${user?.email}`)
 
       if (response.status === 404) {
-        const createResponse = await fetch(
-          'http://localhost:5050/api/manualFeedings',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newFeedingAmount),
-          }
-        )
+        const createResponse = await fetch('/api/manualFeedings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newFeedingAmount),
+        })
 
         if (!createResponse.ok) {
           toast({
@@ -109,7 +104,7 @@ export default function ManualFeeding() {
         })
       } else {
         const updateResponse = await fetch(
-          `http://localhost:5050/api/manualFeedings/user/${user?.email}`,
+          `/api/manualFeedings/user/${user?.email}`,
           {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },

@@ -54,7 +54,6 @@ export default function ManualFeeding() {
           setAmount(data.manualFeedingAmount)
         })
         .catch((error) => {
-          console.error(error)
           toast({
             title: 'Error',
             description: error.message,
@@ -129,7 +128,7 @@ export default function ManualFeeding() {
 
       setUserManualFeeding(amount)
     } catch (error) {
-      console.error('Error:', error)
+      console.error(error)
       toast({
         title: 'Error',
         description:

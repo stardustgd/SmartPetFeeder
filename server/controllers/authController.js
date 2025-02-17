@@ -96,16 +96,12 @@ export const register = async (req, res) => {
 }
 
 export const currentUser = (req, res) => {
-  console.log('Cookies:', req.cookies)
-
   const token = req.cookies.accessToken
-  console.log('Extracted Token:', token)
 
   if (!token) return res.json({ loggedIn: false })
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    console.log('Decoded User:', decoded)
     res.json({ loggedIn: true, user: decoded })
   } catch (err) {
     console.error('Token verification failed:', err.message)

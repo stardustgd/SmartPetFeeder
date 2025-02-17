@@ -19,8 +19,6 @@ export default function Home() {
     setTimeout(() => {
       setShowGif(false)
     }, 2100)
-
-    console.log('Feeder Clicked')
   }
 
   return (

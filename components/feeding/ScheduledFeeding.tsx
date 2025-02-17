@@ -56,7 +56,6 @@ export default function ScheduledFeeding() {
           return response.json()
         })
         .then((data) => {
-          console.log(data[0].schedule)
           setUserSchedules(data[0].schedule)
         })
         .catch((error) => {
@@ -109,11 +108,9 @@ export default function ScheduledFeeding() {
         for (let i = 0; i < userSchedules[0].schedule.length; i++) {
           const schedule = userSchedules[0].schedule[i]
 
-          console.log(schedule)
-
           if (
             JSON.stringify(schedule.days.sort()) ===
-              JSON.stringify(newEntry.days) &&
+            JSON.stringify(newEntry.days) &&
             schedule.time === newEntry.time
           ) {
             isDuplicate = true
@@ -152,7 +149,6 @@ export default function ScheduledFeeding() {
       setTime('')
       setAmount(0)
     } catch (error) {
-      console.error('Error:', error)
       toast({
         title: 'Error',
         description: (error as Error).message,

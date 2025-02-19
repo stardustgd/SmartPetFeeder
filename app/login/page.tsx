@@ -20,7 +20,6 @@ import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
 import { useRouter } from 'next/navigation'
 import useAuth from '@/hooks/useAuth'
-import { useToast } from '@/hooks/use-toast'
 
 export default function LoginPage() {
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -32,7 +31,6 @@ export default function LoginPage() {
   })
 
   const router = useRouter()
-  const { toast } = useToast()
   const { user } = useAuth()
 
   const login = async (email: string, password: string) => {
@@ -60,12 +58,7 @@ export default function LoginPage() {
         credentials: 'include',
       })
 
-      toast({
-        title: 'Signed Out',
-        description: 'You have been signed out',
-      })
-      router.push('/login')
-      router.refresh()
+      window.location.reload()
     } catch (error) {
       console.error('Error logging out:', error)
     }

@@ -19,11 +19,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
 import { useRouter } from 'next/navigation'
-import { useState, useEffect } from 'react'
 import useAuth from '@/hooks/useAuth'
 
 export default function LoginPage() {
-  const [accessToken, setAccessToken] = useState('')
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -34,17 +32,6 @@ export default function LoginPage() {
 
   const router = useRouter()
   const { user } = useAuth()
-
-  // useAuth instead
-  useEffect(() => {
-    if (user) {
-      router.push('/')
-    }
-
-    if (accessToken) {
-      fetchUser()
-    }
-  }, [accessToken, user, router])
 
   const login = async (email: string, password: string) => {
     const response = await fetch('/api/auth/login', {
@@ -61,50 +48,7 @@ export default function LoginPage() {
       return false
     }
 
-    setAccessToken(data.accessToken)
     return true
-  }
-
-  const fetchUser = async () => {
-    if (!accessToken) {
-      return
-    }
-
-    const response = await fetch('/api/auth/current-user', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    })
-
-    const data = await response.json()
-
-    if (!data.loggedIn) {
-      await refreshAccessToken()
-    } else {
-    }
-  }
-
-  const refreshAccessToken = async () => {
-    try {
-      const response = await fetch('/api/auth/refresh', {
-        method: 'POST',
-        credentials: 'include',
-      })
-
-      if (response.status === 403) {
-        return logout()
-      }
-
-      const data = await response.json()
-      if (data.accessToken) {
-        setAccessToken(data.accessToken)
-      }
-    } catch (error) {
-      console.error('Error refreshing access token:', error)
-    }
   }
 
   const logout = async () => {
@@ -114,7 +58,6 @@ export default function LoginPage() {
         credentials: 'include',
       })
 
-      setAccessToken('')
       router.push('/login')
     } catch (error) {
       console.error('Error logging out:', error)
@@ -122,6 +65,12 @@ export default function LoginPage() {
   }
 
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
+    if (user) {
+      form.setError('email', {
+        type: 'manual',
+        message: 'You cannot log into another account until you sign out',
+      })
+    }
     const success = await login(values.email, values.password)
 
     if (!success) {
@@ -138,6 +87,12 @@ export default function LoginPage() {
   return (
     <>
       <NavBar title="Login" />
+      <Button
+        onClick={logout}
+        className="absolute top-4 right-4 border-2 border-white hover:bg-[#dea15f]"
+      >
+        Sign Out
+      </Button>
       <div className="flex flex-col items-center gap-3 px-5 py-5 w-screen h-fit rounded-2xl bg-[#F2F2F2] text-black">
         <h1 className="text-4xl">Sign In</h1>
         <Form {...form}>

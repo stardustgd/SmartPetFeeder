@@ -49,6 +49,26 @@ export default function RegisterPage() {
           message: 'This email address is already in use',
         })
       } else {
+        const newFeedingAmount = {
+          user: values.email,
+          manualFeedingAmount: 0,
+        }
+
+        await fetch('/api/manualFeedings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newFeedingAmount),
+        })
+
+        await fetch('/api/schedules', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            user: values.email,
+            schedule: [],
+          }),
+        })
+
         router.push('/login')
       }
     } catch (error) {

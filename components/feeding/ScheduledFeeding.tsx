@@ -103,25 +103,30 @@ export default function ScheduledFeeding() {
         })
       } else {
         const userSchedules = await response.json()
+        const existingSchedules = userSchedules[0]?.schedule
 
-        let isDuplicate = false
-        for (let i = 0; i < userSchedules[0].schedule.length; i++) {
-          const schedule = userSchedules[0].schedule[i]
-
-          if (
-            JSON.stringify(schedule.days.sort()) ===
-            JSON.stringify(newEntry.days) &&
-            schedule.time === newEntry.time
-          ) {
-            isDuplicate = true
-            break
-          }
+        const hasOverlap = (existingDays: string[], newDays: string[]) => {
+          return newDays.some((day) => existingDays.includes(day))
         }
 
-        if (isDuplicate) {
-          throw new Error(
-            'A feeding schedule for this day and time already exists'
+        const isDuplicate = existingSchedules.some((schedule: Schedule) => {
+          const existingDays = schedule.days.sort()
+          const newDaysSorted = newEntry.days.sort()
+
+          return (
+            schedule.time === newEntry.time &&
+            hasOverlap(existingDays, newDaysSorted)
           )
+        })
+
+        if (isDuplicate) {
+          toast({
+            title: 'Schedule Conflict',
+            description:
+              'A schedule already exists for one or more selected days at this time.',
+            variant: 'destructive',
+          })
+          return
         }
 
         const updatedSchedule = [...userSchedules[0].schedule, newEntry]

@@ -11,10 +11,20 @@ export default function Home() {
   const [isClicked, setIsClicked] = useState(false)
   const [showGif, setShowGif] = useState(true)
 
-  useAuth()
+  const { user } = useAuth()
 
   const handleClick = () => {
     setIsClicked(true)
+
+    if (user) {
+      fetch('/api/manualFeedings/trigger', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user: user.email }),
+      }).catch((error) => {
+        console.error('Failed to trigger feeding button: ', error)
+      })
+    }
 
     setTimeout(() => {
       setShowGif(false)

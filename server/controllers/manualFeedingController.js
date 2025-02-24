@@ -101,3 +101,33 @@ export const deleteManualFeedingsByEmail = async (req, res) => {
     res.status(500).json({ error: 'Failed to delete manual feeding' })
   }
 }
+
+export const triggerManualFeeding = async (req, res) => {
+  try {
+    const { user } = req.body
+
+    if (!user) {
+      return res.status(400).json({ error: 'Missing user field' })
+    }
+
+    const collection = db.collection('manualFeedings')
+    const existingEntry = await collection.findOne({ user })
+
+    if (!existingEntry) {
+      return res
+        .status(404)
+        .json({ error: 'No manual feeding entry found for this user' })
+    }
+
+    const result = await collection.updateOne(
+      { user },
+      { $set: { buttonToFeed: true } }
+    )
+
+    res
+      .status(200)
+      .json({ message: 'Feeding button triggered successfully', data: result })
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete manual feeding' })
+  }
+}

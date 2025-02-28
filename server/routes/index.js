@@ -11,5 +11,4 @@ router.use('/auth', auth)
 router.use('/schedules', schedules)
 router.use('/manualFeedings', manualFeedings)
 
-
 export default router

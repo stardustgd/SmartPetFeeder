@@ -45,15 +45,15 @@ export default function WaterPreferences() {
   return (
     <DialogDrawer open={isOpen} onOpenChange={setIsOpen}>
       <DialogDrawerTrigger asChild>
-        <Button className="bg-transparent h-24 shadow-none">
-          Open Drawer
-        </Button>
+        <Button className="bg-transparent h-24 shadow-none">Open Drawer</Button>
       </DialogDrawerTrigger>
       <DialogDrawerContent>
         <div className="mx-auto w-full max-w-sm">
           <DialogDrawerHeader>
             <DialogDrawerTitle>Song Preferences</DialogDrawerTitle>
-            <DialogDrawerDescription>Modify your song preferences.</DialogDrawerDescription>
+            <DialogDrawerDescription>
+              Modify your song preferences.
+            </DialogDrawerDescription>
           </DialogDrawerHeader>
         </div>
         <div className="flex flex-col p-4 gap-5">
@@ -84,7 +84,10 @@ export default function WaterPreferences() {
             Edit Preferences
           </Button>
           <DialogDrawerClose asChild>
-            <Button variant="outline" className="hover:bg-[#D9D9D9] text-md h-12">
+            <Button
+              variant="outline"
+              className="hover:bg-[#D9D9D9] text-md h-12"
+            >
               Cancel
             </Button>
           </DialogDrawerClose>

@@ -8,13 +8,20 @@ export default function SoundPage() {
       <NavBar title="Sound" />
       <div className="h-full flex items-center justify-center grow">
         <div className="">
-          <Image src="/vinyl.png" width={350} height={350} alt="Vinyl Player" />
+          <Image
+            src="/vinyl.png"
+            width={350}
+            height={350}
+            priority={true}
+            alt="Vinyl Player"
+          />
         </div>
         <div className="absolute">
           <Image
             src="/vinyl_stem.png"
             width={350}
             height={350}
+            priority={true}
             alt="Vinyl Stem"
           />
         </div>

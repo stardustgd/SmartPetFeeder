@@ -40,12 +40,19 @@ export default function Home() {
             src="/feeder.png"
             width={350}
             height={350}
+            priority={true}
             alt="Pet Feeder"
             onClick={handleClick}
           />
         </div>
         <div className="absolute mb-48">
-          <Image src="/bowl.png" width={350} height={350} alt="Pet Bowl" />
+          <Image
+            src="/bowl.png"
+            width={350}
+            height={350}
+            priority={true}
+            alt="Pet Bowl"
+          />
         </div>
         {isClicked && (
           <div className="absolute mb-48">

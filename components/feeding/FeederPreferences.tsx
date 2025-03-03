@@ -126,15 +126,17 @@ export default function FeederPreferences() {
                   {userSchedules.length > 0 ? (
                     <div className="space-y-2">
                       {userSchedules.map((schedule, index) => (
-                        <p key={index} className="leading-none">
-                          {convertToAMPM(schedule.time)} -{' '}
-                          {schedule.feedingAmount} oz.
-                          <br />
-                          {schedule.days.length === 7
-                            ? 'Every Day'
-                            : capitalizeDays(sortDaysOfWeek(schedule.days))}
+                        <div key={index}>
+                          <p className="leading-none">
+                            {convertToAMPM(schedule.time)} -{' '}
+                            {schedule.feedingAmount} oz.
+                            <br />
+                            {schedule.days.length === 7
+                              ? 'Every Day'
+                              : capitalizeDays(sortDaysOfWeek(schedule.days))}
+                          </p>
                           <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
-                        </p>
+                        </div>
                       ))}
                     </div>
                   ) : (

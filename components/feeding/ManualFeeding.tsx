@@ -64,10 +64,10 @@ export default function ManualFeeding() {
   }, [user, toast])
 
   const handleSubmit = async () => {
-    if (amount < 1 || amount > 50) {
+    if (amount < 1 || amount > 10) {
       toast({
         title: 'Amount Error',
-        description: 'Please enter a valid feeding amount between 1 and 50.',
+        description: 'Please enter a valid feeding amount between 1 and 10.',
         variant: 'destructive',
       })
       return
@@ -156,7 +156,7 @@ export default function ManualFeeding() {
       <CardContent>
         <div className="flex flex-col gap-4">
           {userManualFeeding > 0 ? (
-            <h1 className="text-2xl">{userManualFeeding} oz</h1>
+            <h1 className="text-2xl">{userManualFeeding} cups</h1>
           ) : (
             <p className="text-gray-500">No manual feeding set.</p>
           )}

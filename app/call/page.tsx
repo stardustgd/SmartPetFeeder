@@ -1,3 +1,4 @@
+'use client'
 import useAuth from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import NavBar from '@/components/NavBar'

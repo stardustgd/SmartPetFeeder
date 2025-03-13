@@ -15,7 +15,7 @@ export default function CallPage() {
         <img
           width={640}
           height={480}
-          src={process.env.CAMERA_FEED_URL}
+          src={process.env.NEXT_PUBLIC_CAMERA_FEED_URL}
           className="shadow-md"
         />
         <div className="flex flex-row justify-center gap-12">

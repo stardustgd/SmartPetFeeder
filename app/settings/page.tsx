@@ -1,3 +1,4 @@
+import useAuth from '@/hooks/useAuth'
 import Link from 'next/link'
 import { IoPerson } from 'react-icons/io5'
 import {
@@ -43,6 +44,8 @@ function SettingsCard({ title, href, Icon = FaCog }: SettingsCardProps) {
 }
 
 export default function SettingsPage() {
+  useAuth()
+
   const settings = {
     general: [
       {

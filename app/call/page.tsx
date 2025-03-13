@@ -1,8 +1,11 @@
+import useAuth from '@/hooks/useAuth'
 import { Button } from '@/components/ui/button'
 import NavBar from '@/components/NavBar'
 import { FaCamera, FaMicrophone, FaPhoneAlt } from 'react-icons/fa'
 
 export default function CallPage() {
+  useAuth()
+
   return (
     <div className="flex flex-col bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
       <NavBar title="Call" />

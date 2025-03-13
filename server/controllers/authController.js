@@ -8,7 +8,7 @@ const refreshTokens = new Set()
 
 const generateAccessToken = (user) => {
   return jwt.sign({ email: user.email, id: user._id }, SECRET_KEY, {
-    expiresIn: '15m',
+    expiresIn: '1d',
   })
 }
 
@@ -119,7 +119,7 @@ export const refreshToken = (req, res) => {
     const newAccessToken = jwt.sign(
       { email: decoded.email, id: decoded.id },
       process.env.JWT_SECRET,
-      { expiresIn: '15m' }
+      { expiresIn: '1d' }
     )
 
     res.json({ accessToken: newAccessToken })

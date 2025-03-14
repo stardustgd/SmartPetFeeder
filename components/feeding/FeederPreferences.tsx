@@ -119,7 +119,9 @@ export default function FeederPreferences() {
             <div className="flex flex-col p-4 gap-5">
               <CustomCard
                 cardTitle="Manual Feeding Amount"
-                cardDescription={`${manualFeedingAmount} cups`}
+                cardDescription={`${manualFeedingAmount} ${manualFeedingAmount !== 'Not set' 
+                  ? `${Number(manualFeedingAmount) === 1 ? 'gram' : 'grams'}` 
+                  : ''}`}
               />
               <CustomCard cardTitle="Scheduled Feeding">
                 <CardContent className="max-h-40 overflow-y-auto">
@@ -129,7 +131,7 @@ export default function FeederPreferences() {
                         <div key={index}>
                           <p className="leading-none">
                             {convertToAMPM(schedule.time)} -{' '}
-                            {schedule.feedingAmount} cups.
+                            {schedule.feedingAmount} {Number(schedule.feedingAmount) === 1 ? 'gram' : 'grams'}.
                             <br />
                             {schedule.days.length === 7
                               ? 'Every Day'

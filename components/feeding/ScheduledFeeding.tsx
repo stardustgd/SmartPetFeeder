@@ -76,8 +76,8 @@ export default function ScheduledFeeding() {
         )
       }
 
-      if (amount < 1 || amount > 10) {
-        throw new Error('Please enter a valid feeding amount between 1 and 10.')
+      if (amount < 1 || amount > 120) {
+        throw new Error('Please enter a valid feeding amount between 1 and 120.')
       }
 
       const newEntry = {
@@ -216,7 +216,7 @@ export default function ScheduledFeeding() {
               key={index}
               days={schedule.days}
               time={schedule.time}
-              amount={`${schedule.feedingAmount} cups`}
+              amount={`${schedule.feedingAmount} ${Number(schedule.feedingAmount) === 1 ? 'gram' : 'grams'}`}
               idx={index}
               handleDeletion={handleDeletion}
             />

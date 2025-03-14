@@ -56,7 +56,7 @@ export default function SettingsPage() {
         Icon: IoPerson,
       },
       {
-        title: 'Nofications',
+        title: 'Notifications',
         href: 'notifications',
         Icon: FaBell,
       },

@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FaGithub } from 'react-icons/fa'
 
 import NavBar from '@/components/NavBar'
 import { Button } from '@/components/ui/button'
@@ -94,7 +93,7 @@ export default function LoginPage() {
       >
         Sign Out
       </Button>
-      <div className="flex flex-col items-center gap-3 px-5 py-5 w-screen h-fit rounded-2xl bg-[#F2F2F2] text-black">
+      <div className="flex flex-col items-center gap-3 px-6 py-10 md:px-10 md:py-16 w-screen h-fit rounded-2xl bg-[#F2F2F2] text-black max-w-md mx-auto">
         <h1 className="text-4xl">Sign In</h1>
         <Form {...form}>
           <form
@@ -137,10 +136,6 @@ export default function LoginPage() {
           <span className="flex-shrink mx-4 text-gray-400">or</span>
           <div className="flex-grow border-t border-gray-400"></div>
         </div>
-        <Button className="flex gap-2 bg-black">
-          <FaGithub />
-          Continue with GitHub
-        </Button>
         <Link href="/register/">
           <h1 className="text-center text-bold">
             Need an account? <span className="text-blue-600">Register</span>

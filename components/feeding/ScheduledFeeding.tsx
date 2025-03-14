@@ -186,6 +186,7 @@ export default function ScheduledFeeding() {
         }
 
         setUserSchedules(updatedSchedules)
+        setIsOpen(false)
       })
       .catch((error) => {
         toast({

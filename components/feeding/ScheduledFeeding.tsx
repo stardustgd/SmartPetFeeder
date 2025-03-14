@@ -66,7 +66,12 @@ export default function ScheduledFeeding() {
           })
         })
     }
-  }, [user, toast])
+    if (isOpen) {
+      document.body.style.overflow = "hidden"; // Prevents scrolling
+    } else {
+      document.body.style.overflow = "auto"; // Re-enables scrolling
+    }
+  }, [user, toast, isOpen])
 
   const handleSubmit = async () => {
     try {
@@ -230,7 +235,7 @@ export default function ScheduledFeeding() {
               <FaPlus />
             </Button>
           </DialogDrawerTrigger>
-          <DialogDrawerContent>
+          <DialogDrawerContent className="z-[1000] bg-white shadow-xl">
             <div className="mx-auto w-full max-w-sm">
               <DialogDrawerHeader>
                 <DialogDrawerTitle>New Schedule</DialogDrawerTitle>

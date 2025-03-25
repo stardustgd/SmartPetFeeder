@@ -9,9 +9,9 @@ export default function CallPage() {
   useAuth()
   
   return (
-    <div className="flex flex-col bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
+    <div className="flex flex-col bg-linear-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
       <NavBar title="Call" />
-      <div className="flex flex-col items-center flex-grow gap-5 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black">
+      <div className="flex flex-col items-center grow gap-5 px-5 py-5 w-screen rounded-t-2xl bg-[#F2F2F2] text-black">
         <img
           width={640}
           height={480}

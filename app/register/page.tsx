@@ -140,9 +140,9 @@ export default function RegisterPage() {
           </form>
         </Form>
         <div className="w-full relative flex pb-5 items-center">
-          <div className="flex-grow border-t border-gray-400"></div>
-          <span className="flex-shrink mx-4 text-gray-400">or</span>
-          <div className="flex-grow border-t border-gray-400"></div>
+          <div className="grow border-t border-gray-400"></div>
+          <span className="shrink mx-4 text-gray-400">or</span>
+          <div className="grow border-t border-gray-400"></div>
         </div>
         <Link href="/login/">
           <h1 className="text-center text-bold">

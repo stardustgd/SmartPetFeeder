@@ -32,7 +32,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col bg-gradient-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
+    <div className="flex flex-col bg-linear-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
       <NavBar />
       <div className="h-fit flex flex-col items-center justify-center grow mr-20">
         <div className="mb-52 z-10">

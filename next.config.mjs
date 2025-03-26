@@ -11,7 +11,12 @@ const nextConfig = {
       : []
   },
   images: {
-    domains: ['spf.sebastian.sh'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'spf.sebastian.sh',
+      },
+    ],
   },
 }
 

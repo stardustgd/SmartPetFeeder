@@ -86,12 +86,16 @@ export const deleteSchedule = async (
   }
 
   try {
+    const userId = ObjectId.createFromHexString(req.user.id.toString())
     const db = await connectMongo()
     const collection = db.collection('schedules')
 
     const scheduleId = ObjectId.createFromHexString(req.body.scheduleId)
 
-    await collection.deleteOne({ _id: scheduleId })
+    await collection.deleteOne({
+      _id: scheduleId,
+      userId: userId,
+    })
 
     res.status(200).send({ message: 'Schedule successfully deleted' })
   } catch (error) {

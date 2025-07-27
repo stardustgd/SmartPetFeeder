@@ -10,24 +10,13 @@ export const verifyToken = (
   next: NextFunction
 ) => {
   try {
-    if (!('authorization' in req.headers)) {
+    const authToken = req.cookies['authorization']
+
+    if (!authToken) {
       return res.status(401).json({ error: 'Unauthorized' })
     }
 
-    const authHeader = req.headers['authorization']
-
-    if (!authHeader) {
-      return res.status(401).json({ error: 'Unauthorized' })
-    }
-
-    const token = Array.isArray(authHeader) ? authHeader[0] : authHeader
-
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' })
-    }
-
-    const decoded = jwt.verify(token, config.secretKey) as User
-
+    const decoded = jwt.verify(authToken, config.secretKey) as User
     req.user = decoded
 
     next()

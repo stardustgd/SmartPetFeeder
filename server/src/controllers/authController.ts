@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { AuthenticatedRequest } from '../models/auth'
+import { ObjectId } from 'mongodb'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import config from '../config/config'
@@ -17,18 +18,26 @@ export const login = async (
     const user = await collection.findOne({ email: req.body.email })
 
     if (!user) {
-      return res.status(401).json({ error: 'Invalid credentials' })
+      return res.status(401).json({ message: 'Invalid credentials' })
     }
 
     const passwordMatch = 'Test' === req.body.password
 
     if (!passwordMatch) {
-      return res.status(401).json({ error: 'Invalid credentials' })
+      return res.status(401).json({ message: 'Invalid credentials' })
     }
 
-    const token = jwt.sign({ id: user._id }, config.secretKey)
+    const token = jwt.sign({ id: user._id }, config.secretKey, {
+      expiresIn: '12h',
+    })
 
-    res.status(200).json({ token })
+    res
+      .cookie('authorization', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+      })
+      .status(200)
+      .json({ message: 'Successfully logged in' })
   } catch (error) {
     next(error)
   }
@@ -46,7 +55,7 @@ export const register = async (
     const existingUser = await collection.findOne({ email: req.body.email })
 
     if (existingUser) {
-      return res.status(400).json({ error: 'Email already exists' })
+      return res.status(400).json({ message: 'Email already exists' })
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
@@ -69,24 +78,22 @@ export const currentUser = async (
   next: NextFunction
 ) => {
   try {
-    if (!req.user) {
-      return res.status(400).json({ message: 'Invalid credentials' })
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: 'Invalid credentials' })
     }
 
     const db = await connectMongo()
     const collection = db.collection('users')
 
-    const user = await collection.findOne({ email: req.body.email })
+    const user = await collection.findOne({
+      _id: ObjectId.createFromHexString(req.user.id.toString()),
+    })
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' })
+      return res.status(404).json({ message: 'User not found' })
     }
 
-    console.log(user)
-
-    // TODO: Check that the userId's match
-
-    res.status(200).json({ user })
+    res.status(200).json({ id: user._id, name: user.name, email: user.email })
   } catch (error) {
     next(error)
   }

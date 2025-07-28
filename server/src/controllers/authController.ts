@@ -93,7 +93,12 @@ export const currentUser = async (
       return res.status(404).json({ message: 'User not found' })
     }
 
-    res.status(200).json({ id: user._id, name: user.name, email: user.email })
+    res.status(200).json({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      preferences: user.preferences,
+    })
   } catch (error) {
     next(error)
   }

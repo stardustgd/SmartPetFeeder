@@ -77,7 +77,9 @@ export default function ScheduledFeeding() {
       }
 
       if (amount < 1 || amount > 120) {
-        throw new Error('Please enter a valid feeding amount between 1 and 120.')
+        throw new Error(
+          'Please enter a valid feeding amount between 1 and 120.'
+        )
       }
 
       const newEntry = {

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation'
+// import { redirect } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
 type User = {
@@ -11,7 +11,6 @@ type User = {
 const useAuth = () => {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,19 +26,19 @@ const useAuth = () => {
         const data = await response.json()
 
         if (!data.loggedIn) {
-          router.push('/login')
+          // router.push('/login')
         } else {
           setUser(data.user)
           setLoading(false)
         }
       } catch (error) {
         console.log(error)
-        router.push('/login')
+        // router.push('/login')
       }
     }
 
     fetchUser()
-  }, [router])
+  }, [])
 
   return { user, loading }
 }

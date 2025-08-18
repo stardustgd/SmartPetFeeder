@@ -8,6 +8,10 @@ import ScheduledFeeding from '@/components/feeding/ScheduledFeeding'
 export default function FeedingPage() {
   useAuth()
 
+  // TODO: Something like:
+  // const user = await getUser()
+  // if (!user) redirect("/login")
+
   return (
     <div className="flex flex-col bg-linear-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen pb-12 md:pb-0">
       <NavBar title="Feeding" />

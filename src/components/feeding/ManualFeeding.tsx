@@ -154,15 +154,16 @@ export default function ManualFeeding() {
   return (
     <CustomCard cardTitle="Manual Feeding">
       <CardContent>
-      <div className="flex flex-col gap-4">
-        {userManualFeeding > 0 ? (
-          <h1 className="text-2xl">
-            {userManualFeeding} {Number(userManualFeeding) === 1 ? 'gram' : 'grams'}
-          </h1>
-        ) : (
-          <p className="text-gray-500">No manual feeding set.</p>
-        )}
-      </div>
+        <div className="flex flex-col gap-4">
+          {userManualFeeding > 0 ? (
+            <h1 className="text-2xl">
+              {userManualFeeding}{' '}
+              {Number(userManualFeeding) === 1 ? 'gram' : 'grams'}
+            </h1>
+          ) : (
+            <p className="text-gray-500">No manual feeding set.</p>
+          )}
+        </div>
       </CardContent>
       <CardFooter>
         <DialogDrawer open={isOpen} onOpenChange={setIsOpen}>

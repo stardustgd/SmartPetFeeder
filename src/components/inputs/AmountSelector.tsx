@@ -9,18 +9,15 @@ export default function AmountSelector({
   amount,
   setAmount,
 }: AmountSelectorProps) {
-  const handleAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(parseInt(event.target.value))
-  }
-
   return (
     <div className="flex items-center justify-between bg-[#F0F0F0]">
       <h1>
-        Amount <span className="ml-1 font-extralight text-gray-700">(cups)</span>
+        Amount{' '}
+        <span className="ml-1 font-extralight text-gray-700">(cups)</span>
       </h1>
       <Input
         value={amount}
-        onChange={handleAmount}
+        onChange={(e) => setAmount(Number(e.target.value))}
         placeholder="0"
         type="number"
         min={0}

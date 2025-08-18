@@ -2,24 +2,13 @@
 
 import useAuth from '@/hooks/useAuth'
 import Link from 'next/link'
-import { IoPerson } from 'react-icons/io5'
-import {
-  FaBell,
-  FaCog,
-  FaExclamationTriangle,
-  FaEye,
-  FaPaperPlane,
-  FaPhoneAlt,
-  FaQuestionCircle,
-  FaRecordVinyl,
-  FaShieldAlt,
-} from 'react-icons/fa'
-import { GiDogBowl } from 'react-icons/gi'
+import { FaCog } from 'react-icons/fa'
 import { IconType } from 'react-icons'
 import { Label } from '@/components/ui/label'
 import { Card, CardHeader } from '@/components/ui/card'
 import NavBar from '@/components/NavBar'
 import { IoIosArrowForward } from 'react-icons/io'
+import { settings } from '@/constants/settings'
 
 type SettingsCardProps = {
   title: string
@@ -47,69 +36,7 @@ function SettingsCard({ title, href, Icon = FaCog }: SettingsCardProps) {
 
 export default function SettingsPage() {
   useAuth()
-  
-  const settings = {
-    general: [
-      {
-        title: 'Account',
-        href: '/login',
-        Icon: IoPerson,
-      },
-      {
-        title: 'Notifications',
-        href: 'notifications',
-        Icon: FaBell,
-      },
-      {
-        title: 'Appearance',
-        href: 'appearance',
-        Icon: FaEye,
-      },
-      {
-        title: 'Privacy & Security',
-        href: 'privacy',
-        Icon: FaShieldAlt,
-      },
-      {
-        title: 'Your Device',
-        href: 'yourdevice',
-      },
-    ],
-    preferences: [
-      {
-        title: 'Feeder Preferences',
-        href: '/feeding',
-        Icon: GiDogBowl,
-      },
-      {
-        title: 'Music Preferences',
-        href: '/sound',
-        Icon: FaRecordVinyl,
-      },
-    ],
-    feedback: [
-      {
-        title: 'About',
-        href: 'about',
-        Icon: FaQuestionCircle,
-      },
-      {
-        title: 'Help and Support',
-        href: 'contact',
-        Icon: FaPhoneAlt,
-      },
-      {
-        title: 'Report a Problem',
-        href: 'https://github.com/stardustgd/SmartPetFeeder/issues',
-        Icon: FaExclamationTriangle,
-      },
-      {
-        title: 'Send Feedback',
-        href: 'feedback',
-        Icon: FaPaperPlane,
-      },
-    ],
-  }
+
   return (
     <>
       <NavBar title="Settings" />

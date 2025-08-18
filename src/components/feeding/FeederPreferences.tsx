@@ -9,6 +9,7 @@ import useAuth from '@/hooks/useAuth'
 import CustomCard from '@/components/CustomCard'
 import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
+
 import {
   Dialog,
   DialogClose,
@@ -101,7 +102,7 @@ export default function FeederPreferences() {
     : DrawerDescription
 
   return (
-    <div>
+    <div className="w-full bottom-0 absolute pb-16 md:pb-0">
       <DialogDrawer open={isOpen} onOpenChange={setIsOpen}>
         <DialogDrawerTrigger asChild>
           <Button className="bg-transparent shadow-none h-24 w-full">
@@ -119,9 +120,10 @@ export default function FeederPreferences() {
             <div className="flex flex-col p-4 gap-5">
               <CustomCard
                 cardTitle="Manual Feeding Amount"
-                cardDescription={`${manualFeedingAmount} ${manualFeedingAmount !== 'Not set' 
-                  ? `${Number(manualFeedingAmount) === 1 ? 'gram' : 'grams'}` 
-                  : ''}`}
+                cardDescription={`${manualFeedingAmount} ${manualFeedingAmount !== 'Not set'
+                    ? `${Number(manualFeedingAmount) === 1 ? 'gram' : 'grams'}`
+                    : ''
+                  }`}
               />
               <CustomCard cardTitle="Scheduled Feeding">
                 <CardContent className="max-h-40 overflow-y-auto">
@@ -131,7 +133,11 @@ export default function FeederPreferences() {
                         <div key={index}>
                           <p className="leading-none">
                             {convertToAMPM(schedule.time)} -{' '}
-                            {schedule.feedingAmount} {Number(schedule.feedingAmount) === 1 ? 'gram' : 'grams'}.
+                            {schedule.feedingAmount}{' '}
+                            {Number(schedule.feedingAmount) === 1
+                              ? 'gram'
+                              : 'grams'}
+                            .
                             <br />
                             {schedule.days.length === 7
                               ? 'Every Day'

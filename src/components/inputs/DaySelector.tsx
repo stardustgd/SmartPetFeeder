@@ -27,16 +27,12 @@ export default function DaySelector({
   selectedDays,
   setSelectedDays,
 }: DaySelectorProps) {
-  const handleSelect = (newSelectedDays: string[]) => {
-    setSelectedDays(newSelectedDays)
-  }
-
   return (
     <div className="items-center justify-center space-x-2 w-full">
       <ToggleGroup
         type="multiple"
         value={selectedDays}
-        onValueChange={handleSelect}
+        onValueChange={(newSelectedDays) => setSelectedDays(newSelectedDays)}
       >
         <DayGroupItem value="sunday" label="Sunday" text="Sun" />
         <DayGroupItem value="monday" label="Monday" text="Mon" />

@@ -1,14 +1,15 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { useToast } from '@/hooks/use-toast'
-import useAuth from '@/hooks/useAuth'
 
 import CustomCard from '@/components/CustomCard'
 import { Button } from '@/components/ui/button'
 import { CardContent } from '@/components/ui/card'
+
+import { useContext } from 'react'
+import UserContext from '@/contexts/UserContext'
 
 import {
   Dialog,
@@ -30,65 +31,15 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import { convertToAMPM, capitalizeDays, sortDaysOfWeek } from '@/lib/utils'
-import { Schedule } from './types'
+import { convertToAMPM } from '@/lib/utils'
+import { Schedule } from '@/types'
 
 export default function FeederPreferences() {
+  const { user } = useContext(UserContext)
+
   const [isOpen, setIsOpen] = useState(false)
-  const [userSchedules, setUserSchedules] = useState<Schedule[]>([])
-  const [manualFeedingAmount, setManualFeedingAmount] = useState<string | null>(
-    null
-  )
   const isDesktop = useMediaQuery('(min-width: 768px)')
-  const { toast } = useToast()
-  const { user } = useAuth()
-
-  // Get user schedules and update userSchedules
-  useEffect(() => {
-    if (user) {
-      fetch(`/api/schedules/user/${user.email}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to load schedules')
-          }
-          return response.json()
-        })
-        .then((response) => {
-          setUserSchedules(response[0].schedule || [])
-        })
-        .catch((error) => {
-          toast({
-            title: 'Error',
-            description: error.message,
-            variant: 'destructive',
-          })
-        })
-    }
-  }, [user, toast])
-
-  // Get manual feeding and update manualFeedingAmount
-  useEffect(() => {
-    if (user) {
-      fetch(`/api/manualFeedings/user/${user.email}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to load manual feeding amount')
-          }
-
-          return response.json()
-        })
-        .then((response) => {
-          setManualFeedingAmount(response.manualFeedingAmount || 'Not set')
-        })
-        .catch((error) => {
-          toast({
-            title: 'Error',
-            description: error.message,
-            variant: 'destructive',
-          })
-        })
-    }
-  }, [user, toast])
+  // const { toast } = useToast()
 
   const DialogDrawer = isDesktop ? Dialog : Drawer
   const DialogDrawerTrigger = isDesktop ? DialogTrigger : DrawerTrigger
@@ -118,40 +69,14 @@ export default function FeederPreferences() {
               </DialogDrawerDescription>
             </DialogDrawerHeader>
             <div className="flex flex-col p-4 gap-5">
-              <CustomCard
-                cardTitle="Manual Feeding Amount"
-                cardDescription={`${manualFeedingAmount} ${manualFeedingAmount !== 'Not set'
-                    ? `${Number(manualFeedingAmount) === 1 ? 'gram' : 'grams'}`
-                    : ''
-                  }`}
+              <ManualFeedingCard
+                manualFeedingAmount={user.preferences.manualFeedingAmount}
+                unit={user.preferences.unit}
               />
-              <CustomCard cardTitle="Scheduled Feeding">
-                <CardContent className="max-h-40 overflow-y-auto">
-                  {userSchedules.length > 0 ? (
-                    <div className="space-y-2">
-                      {userSchedules.map((schedule, index) => (
-                        <div key={index}>
-                          <p className="leading-none">
-                            {convertToAMPM(schedule.time)} -{' '}
-                            {schedule.feedingAmount}{' '}
-                            {Number(schedule.feedingAmount) === 1
-                              ? 'gram'
-                              : 'grams'}
-                            .
-                            <br />
-                            {schedule.days.length === 7
-                              ? 'Every Day'
-                              : capitalizeDays(sortDaysOfWeek(schedule.days))}
-                          </p>
-                          <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-gray-500">No scheduled feedings.</p>
-                  )}
-                </CardContent>
-              </CustomCard>
+              <ScheduledFeedingCard
+                schedules={user.schedules}
+                unit={user.preferences.unit}
+              />
             </div>
           </div>
           <DialogDrawerFooter className="mx-auto w-full max-w-sm">
@@ -170,5 +95,51 @@ export default function FeederPreferences() {
         </DialogDrawerContent>
       </DialogDrawer>
     </div>
+  )
+}
+
+function ManualFeedingCard({
+  manualFeedingAmount,
+  unit,
+}: {
+  manualFeedingAmount: number
+  unit: string
+}) {
+  return (
+    <CustomCard
+      cardTitle="Manual Feeding Amount"
+      cardDescription={`${manualFeedingAmount} ${unit}`}
+    />
+  )
+}
+
+function ScheduledFeedingCard({
+  schedules,
+  unit,
+}: {
+  schedules: Schedule[]
+  unit: string
+}) {
+  return (
+    <CustomCard cardTitle="Scheduled Feeding">
+      <CardContent className="max-h-40 overflow-y-auto">
+        <div className="space-y-2">
+          {schedules.length === 0 ? (
+            <p className="text-gray-500">No scheduled feedings.</p>
+          ) : (
+            schedules.map((schedule) => (
+              <div key={schedule._id}>
+                <p>{convertToAMPM(schedule.time)}</p>
+                <p>
+                  {schedule.amount} {unit}
+                </p>
+                <p>{schedule.days}</p>
+                <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
+              </div>
+            ))
+          )}
+        </div>
+      </CardContent>
+    </CustomCard>
   )
 }

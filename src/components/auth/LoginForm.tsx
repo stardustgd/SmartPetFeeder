@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -15,10 +13,15 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
-import { useRouter } from 'next/navigation'
-import useAuth from '@/hooks/useAuth'
+import { redirect } from 'next/navigation'
+import { useReducer } from 'react'
+import { defaultUser } from '@/src/reducers/UserReducer'
+import { userReducer } from '@/reducers/UserReducer'
+import { SET_USER_DATA } from '@/src/reducers/actionTypes'
 
 export default function LoginForm() {
+  const [user, userDispatch] = useReducer(userReducer, defaultUser)
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -27,47 +30,34 @@ export default function LoginForm() {
     },
   })
 
-  const router = useRouter()
-  const { user } = useAuth()
-
-  // TODO: make better
-  const login = async (email: string, password: string) => {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    })
-
-    const data = await response.json()
-
-    if (!data.accessToken) {
-      console.error('No access token received.')
-      return false
-    }
-
-    return true
-  }
-
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
-    if (user) {
-      form.setError('email', {
-        type: 'manual',
-        message: 'You cannot log into another account until you sign out',
-      })
-      return
-    }
-    const success = await login(values.email, values.password)
+    const { email, password } = values
 
-    if (!success) {
-      form.setError('password', {
-        type: 'manual',
-        message: 'Invalid email or password',
-      })
-      return
-    }
+    // TODO: check if a user is already signed in
 
-    router.push('/')
+    try {
+      const res = await fetch(`http://localhost:5050/api/auth/login`, {
+        body: JSON.stringify({ email, password }),
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      })
+
+      if (!res.ok) {
+        throw new Error('Error logging in')
+      }
+
+      const userData = await res.json()
+
+      // userDispatch({
+      //   type: SET_USER_DATA,
+      //   payload: userData,
+      // })
+
+      redirect('/')
+    } catch (err) {
+      console.error(err)
+    }
   }
   return (
     <div className="flex flex-col items-center gap-3 px-6 py-10 md:px-10 md:py-16 w-screen h-fit rounded-2xl bg-[#F2F2F2] text-black max-w-md mx-auto">

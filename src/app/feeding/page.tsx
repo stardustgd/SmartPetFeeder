@@ -1,13 +1,8 @@
-'use client'
-
-import useAuth from '@/hooks/useAuth'
 import NavBar from '@/components/NavBar'
 import ManualFeeding from '@/components/feeding/ManualFeeding'
 import ScheduledFeeding from '@/components/feeding/ScheduledFeeding'
 
 export default function FeedingPage() {
-  useAuth()
-
   // TODO: Something like:
   // const user = await getUser()
   // if (!user) redirect("/login")

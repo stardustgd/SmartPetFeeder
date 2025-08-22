@@ -1,7 +1,7 @@
 'use client'
 
 import { FaPlus } from 'react-icons/fa'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { useMediaQuery } from '@/hooks/use-media-query'
 
@@ -29,39 +29,38 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer'
 import AmountSelector from '@/components/inputs/AmountSelector'
-import useAuth from '@/hooks/useAuth'
+import UserContext from '@/src/contexts/UserContext'
 
 export default function ManualFeeding() {
+  const { user } = useContext(UserContext)
   const [amount, setAmount] = useState<number>(0)
   const [isOpen, setIsOpen] = useState(false)
-  const [userManualFeeding, setUserManualFeeding] = useState<number>(-1)
   const isDesktop = useMediaQuery('(min-width: 768px)')
   const { toast } = useToast()
-  const { user } = useAuth()
 
-  useEffect(() => {
-    if (user) {
-      fetch(`/api/manualFeedings/user/${user.email}`)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to load manual feeding data')
-          }
-
-          return response.json()
-        })
-        .then((data) => {
-          setUserManualFeeding(data.manualFeedingAmount)
-          setAmount(data.manualFeedingAmount)
-        })
-        .catch((error) => {
-          toast({
-            title: 'Error',
-            description: error.message,
-            variant: 'destructive',
-          })
-        })
-    }
-  }, [user, toast])
+  // useEffect(() => {
+  //   if (user) {
+  //     fetch(`/api/manualFeedings/user/${user.email}`)
+  //       .then((response) => {
+  //         if (!response.ok) {
+  //           throw new Error('Failed to load manual feeding data')
+  //         }
+  //
+  //         return response.json()
+  //       })
+  //       .then((data) => {
+  //         setUserManualFeeding(data.manualFeedingAmount)
+  //         setAmount(data.manualFeedingAmount)
+  //       })
+  //       .catch((error) => {
+  //         toast({
+  //           title: 'Error',
+  //           description: error.message,
+  //           variant: 'destructive',
+  //         })
+  //       })
+  //   }
+  // }, [user, toast])
 
   const handleSubmit = async () => {
     if (amount < 1 || amount > 120) {
@@ -78,64 +77,64 @@ export default function ManualFeeding() {
       manualFeedingAmount: amount,
     }
 
-    try {
-      const response = await fetch(`/api/manualFeedings/user/${user?.email}`)
-
-      if (response.status === 404) {
-        const createResponse = await fetch('/api/manualFeedings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newFeedingAmount),
-        })
-
-        if (!createResponse.ok) {
-          toast({
-            title: 'Error',
-            description: 'Failed to create manual feeding.',
-            variant: 'destructive',
-          })
-          return
-        }
-
-        toast({
-          title: 'Manual Feeding Created',
-          description: 'Your manual feeding preference has been saved.',
-        })
-      } else {
-        const updateResponse = await fetch(
-          `/api/manualFeedings/user/${user?.email}`,
-          {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(newFeedingAmount),
-          }
-        )
-
-        if (!updateResponse.ok) {
-          toast({
-            title: 'Error',
-            description: 'Failed to update manual feeding.',
-            variant: 'destructive',
-          })
-          return
-        }
-
-        toast({
-          title: 'Manual Feeding Updated',
-          description: 'Your manual feeding preference has been updated.',
-        })
-      }
-
-      setUserManualFeeding(amount)
-    } catch (error) {
-      console.error(error)
-      toast({
-        title: 'Error',
-        description:
-          'Something went wrong while saving the manual feeding amount.',
-        variant: 'destructive',
-      })
-    }
+    // try {
+    //   const response = await fetch(`/api/manualFeedings/user/${user?.email}`)
+    //
+    //   if (response.status === 404) {
+    //     const createResponse = await fetch('/api/manualFeedings', {
+    //       method: 'POST',
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify(newFeedingAmount),
+    //     })
+    //
+    //     if (!createResponse.ok) {
+    //       toast({
+    //         title: 'Error',
+    //         description: 'Failed to create manual feeding.',
+    //         variant: 'destructive',
+    //       })
+    //       return
+    //     }
+    //
+    //     toast({
+    //       title: 'Manual Feeding Created',
+    //       description: 'Your manual feeding preference has been saved.',
+    //     })
+    //   } else {
+    //     const updateResponse = await fetch(
+    //       `/api/manualFeedings/user/${user?.email}`,
+    //       {
+    //         method: 'PUT',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify(newFeedingAmount),
+    //       }
+    //     )
+    //
+    //     if (!updateResponse.ok) {
+    //       toast({
+    //         title: 'Error',
+    //         description: 'Failed to update manual feeding.',
+    //         variant: 'destructive',
+    //       })
+    //       return
+    //     }
+    //
+    //     toast({
+    //       title: 'Manual Feeding Updated',
+    //       description: 'Your manual feeding preference has been updated.',
+    //     })
+    //   }
+    //
+    //   setUserManualFeeding(amount)
+    // } catch (error) {
+    //   console.error(error)
+    //   toast({
+    //     title: 'Error',
+    //     description:
+    //       'Something went wrong while saving the manual feeding amount.',
+    //     variant: 'destructive',
+    //   })
+    // }
 
     setIsOpen(false)
   }
@@ -151,14 +150,16 @@ export default function ManualFeeding() {
     ? DialogDescription
     : DrawerDescription
 
+  const manualFeedingAmount = user.preferences.manualFeedingAmount
+
   return (
     <CustomCard cardTitle="Manual Feeding">
       <CardContent>
         <div className="flex flex-col gap-4">
-          {userManualFeeding > 0 ? (
+          {manualFeedingAmount > 0 ? (
             <h1 className="text-2xl">
-              {userManualFeeding}{' '}
-              {Number(userManualFeeding) === 1 ? 'gram' : 'grams'}
+              {manualFeedingAmount}{' '}
+              {Number(manualFeedingAmount) === 1 ? 'gram' : 'grams'}
             </h1>
           ) : (
             <p className="text-gray-500">No manual feeding set.</p>

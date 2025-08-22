@@ -14,8 +14,8 @@ export const RegisterSchema = z
     confirmPassword: z
       .string()
       .min(1, { message: 'Please confirm your password.' })
-      .min(6, {
-        message: 'Password must be at least 6 characters long.',
+      .min(4, {
+        message: 'Password must be at least 4 characters long.',
       }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -27,7 +27,7 @@ export const LoginSchema = z.object({
   email: z.string().min(1, { message: 'Please enter an email address' }).email({
     message: 'Please enter a valid email address',
   }),
-  password: z.string().min(6, {
-    message: 'Password must be at least 6 characters long.',
+  password: z.string().min(4, {
+    message: 'Password must be at least 4 characters long.',
   }),
 })

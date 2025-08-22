@@ -6,9 +6,10 @@ export interface User {
   preferences: Preferences
 }
 
-export type UserAction =
-  | { type: 'SET_USER'; payload: User }
-  | { type: 'SET_SCHEDULES'; payload: User['schedules'] }
+export type UserAction = {
+  type: string
+  payload: any // TODO: fix any type
+}
 
 export interface Preferences {
   manualFeedingAmount: number
@@ -16,7 +17,7 @@ export interface Preferences {
 }
 
 export interface Schedule {
-  id: string
+  _id: string
   userId: string
   days: string[]
   time: string

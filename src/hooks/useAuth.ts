@@ -13,31 +13,31 @@ const useAuth = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('/api/auth/current-user', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          credentials: 'include',
-        })
-
-        const data = await response.json()
-
-        if (!data.loggedIn) {
-          // router.push('/login')
-        } else {
-          setUser(data.user)
-          setLoading(false)
-        }
-      } catch (error) {
-        console.log(error)
-        // router.push('/login')
-      }
-    }
-
-    fetchUser()
+    // const fetchUser = async () => {
+    //   try {
+    //     const response = await fetch('/api/auth/current-user', {
+    //       method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //       credentials: 'include',
+    //     })
+    //
+    //     const data = await response.json()
+    //
+    //     if (!data.loggedIn) {
+    //       // router.push('/login')
+    //     } else {
+    //       setUser(data.user)
+    //       setLoading(false)
+    //     }
+    //   } catch (error) {
+    //     console.log(error)
+    //     // router.push('/login')
+    //   }
+    // }
+    //
+    // fetchUser()
   }, [])
 
   return { user, loading }

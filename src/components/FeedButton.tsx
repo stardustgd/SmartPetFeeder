@@ -2,29 +2,27 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import useAuth from '@/hooks/useAuth'
 
 export default function FeedButton() {
   const [isClicked, setIsClicked] = useState(false)
   const [showGif, setShowGif] = useState(true)
 
-  const { user } = useAuth()
-
   const handleClick = () => {
     setIsClicked(true)
 
-    if (user) {
-      fetch('/api/manualFeedings/trigger', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user: user.email }),
-      }).catch((error) => {
-        console.error('Failed to trigger feeding button: ', error)
-      })
-    }
+    // if (user) {
+    //   fetch('/api/manualFeedings/trigger', {
+    //     method: 'PUT',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ user: user.email }),
+    //   }).catch((error) => {
+    //     console.error('Failed to trigger feeding button: ', error)
+    //   })
+    // }
 
     setTimeout(() => {
       setShowGif(false)
+      setIsClicked(false)
     }, 2100)
   }
 
@@ -50,6 +48,7 @@ export default function FeedButton() {
         />
       </div>
       {isClicked && (
+        // TODO: Look into width or height modified warning
         <div className="absolute mb-48">
           <Image
             src="/food_dispense.gif"
@@ -64,7 +63,7 @@ export default function FeedButton() {
             width={350}
             height={350}
             alt="Dispensed food"
-            className={`${showGif ? 'hidden' : 'block'}`}
+            className={showGif ? 'hidden' : 'block'}
             priority
           />
         </div>

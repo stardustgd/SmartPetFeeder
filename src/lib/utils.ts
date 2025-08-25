@@ -35,3 +35,7 @@ export function sortDaysOfWeek(days: string[]) {
 
   return days.sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
 }
+
+export function formatManualFeedingAmount(amount: number) {
+  return `${amount} ${amount === 1 ? 'gram' : 'grams'}`
+}

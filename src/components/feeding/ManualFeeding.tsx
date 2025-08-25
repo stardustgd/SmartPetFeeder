@@ -17,12 +17,14 @@ import {
   ModalTitle,
   ModalTrigger,
 } from '@/components/ui/modal'
+import { formatManualFeedingAmount } from '@/lib/utils'
 import AmountSelector from '@/components/inputs/AmountSelector'
 import UserContext from '@/src/contexts/UserContext'
 
 export default function ManualFeeding() {
   const { user } = useContext(UserContext)
-  const [amount, setAmount] = useState<number>(0)
+  const manualFeedingAmount = user.preferences.manualFeedingAmount
+  const [amount, setAmount] = useState<number>(manualFeedingAmount)
   const [isOpen, setIsOpen] = useState(false)
   const { toast } = useToast()
 
@@ -37,19 +39,16 @@ export default function ManualFeeding() {
     setIsOpen(false)
   }
 
-  const manualFeedingAmount = user.preferences.manualFeedingAmount
-
   return (
     <CustomCard cardTitle="Manual Feeding">
       <CardContent>
         <div className="flex flex-col gap-4">
-          {manualFeedingAmount > 0 ? (
-            <h1 className="text-2xl">
-              {manualFeedingAmount}{' '}
-              {Number(manualFeedingAmount) === 1 ? 'gram' : 'grams'}
-            </h1>
+          {manualFeedingAmount === -1 ? (
+            <p className="text-gray-500">No manual feeding amount set</p>
           ) : (
-            <p className="text-gray-500">No manual feeding set.</p>
+            <h1 className="text-2xl">
+              {formatManualFeedingAmount(manualFeedingAmount)}
+            </h1>
           )}
         </div>
       </CardContent>

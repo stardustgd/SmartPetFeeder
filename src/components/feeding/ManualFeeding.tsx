@@ -1,33 +1,22 @@
 'use client'
 
 import { FaPlus } from 'react-icons/fa'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useContext } from 'react'
 import { useToast } from '@/hooks/use-toast'
-import { useMediaQuery } from '@/hooks/use-media-query'
-
 import CustomCard from '@/components/CustomCard'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { SUCCESS_TOAST, MANUAL_FEEDING_SUCCESS_MESSAGE } from '@/constants'
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
+  Modal,
+  ModalClose,
+  ModalContent,
+  ModalDescription,
+  ModalFooter,
+  ModalHeader,
+  ModalTitle,
+  ModalTrigger,
+} from '@/components/ui/modal'
 import AmountSelector from '@/components/inputs/AmountSelector'
 import UserContext from '@/src/contexts/UserContext'
 
@@ -35,120 +24,18 @@ export default function ManualFeeding() {
   const { user } = useContext(UserContext)
   const [amount, setAmount] = useState<number>(0)
   const [isOpen, setIsOpen] = useState(false)
-  const isDesktop = useMediaQuery('(min-width: 768px)')
   const { toast } = useToast()
 
-  // useEffect(() => {
-  //   if (user) {
-  //     fetch(`/api/manualFeedings/user/${user.email}`)
-  //       .then((response) => {
-  //         if (!response.ok) {
-  //           throw new Error('Failed to load manual feeding data')
-  //         }
-  //
-  //         return response.json()
-  //       })
-  //       .then((data) => {
-  //         setUserManualFeeding(data.manualFeedingAmount)
-  //         setAmount(data.manualFeedingAmount)
-  //       })
-  //       .catch((error) => {
-  //         toast({
-  //           title: 'Error',
-  //           description: error.message,
-  //           variant: 'destructive',
-  //         })
-  //       })
-  //   }
-  // }, [user, toast])
+  // TODO: Implement manual feeding action
 
   const handleSubmit = async () => {
-    if (amount < 1 || amount > 120) {
-      toast({
-        title: 'Amount Error',
-        description: 'Please enter a valid feeding amount between 1 and 120.',
-        variant: 'destructive',
-      })
-      return
-    }
-
-    const newFeedingAmount = {
-      user: user?.email,
-      manualFeedingAmount: amount,
-    }
-
-    // try {
-    //   const response = await fetch(`/api/manualFeedings/user/${user?.email}`)
-    //
-    //   if (response.status === 404) {
-    //     const createResponse = await fetch('/api/manualFeedings', {
-    //       method: 'POST',
-    //       headers: { 'Content-Type': 'application/json' },
-    //       body: JSON.stringify(newFeedingAmount),
-    //     })
-    //
-    //     if (!createResponse.ok) {
-    //       toast({
-    //         title: 'Error',
-    //         description: 'Failed to create manual feeding.',
-    //         variant: 'destructive',
-    //       })
-    //       return
-    //     }
-    //
-    //     toast({
-    //       title: 'Manual Feeding Created',
-    //       description: 'Your manual feeding preference has been saved.',
-    //     })
-    //   } else {
-    //     const updateResponse = await fetch(
-    //       `/api/manualFeedings/user/${user?.email}`,
-    //       {
-    //         method: 'PUT',
-    //         headers: { 'Content-Type': 'application/json' },
-    //         body: JSON.stringify(newFeedingAmount),
-    //       }
-    //     )
-    //
-    //     if (!updateResponse.ok) {
-    //       toast({
-    //         title: 'Error',
-    //         description: 'Failed to update manual feeding.',
-    //         variant: 'destructive',
-    //       })
-    //       return
-    //     }
-    //
-    //     toast({
-    //       title: 'Manual Feeding Updated',
-    //       description: 'Your manual feeding preference has been updated.',
-    //     })
-    //   }
-    //
-    //   setUserManualFeeding(amount)
-    // } catch (error) {
-    //   console.error(error)
-    //   toast({
-    //     title: 'Error',
-    //     description:
-    //       'Something went wrong while saving the manual feeding amount.',
-    //     variant: 'destructive',
-    //   })
-    // }
+    toast({
+      title: SUCCESS_TOAST,
+      description: MANUAL_FEEDING_SUCCESS_MESSAGE,
+    })
 
     setIsOpen(false)
   }
-
-  const DialogDrawer = isDesktop ? Dialog : Drawer
-  const DialogDrawerTrigger = isDesktop ? DialogTrigger : DrawerTrigger
-  const DialogDrawerContent = isDesktop ? DialogContent : DrawerContent
-  const DialogDrawerHeader = isDesktop ? DialogHeader : DrawerHeader
-  const DialogDrawerTitle = isDesktop ? DialogTitle : DrawerTitle
-  const DialogDrawerFooter = isDesktop ? DialogFooter : DrawerFooter
-  const DialogDrawerClose = isDesktop ? DialogClose : DrawerClose
-  const DialogDrawerDescription = isDesktop
-    ? DialogDescription
-    : DrawerDescription
 
   const manualFeedingAmount = user.preferences.manualFeedingAmount
 
@@ -167,42 +54,42 @@ export default function ManualFeeding() {
         </div>
       </CardContent>
       <CardFooter>
-        <DialogDrawer open={isOpen} onOpenChange={setIsOpen}>
-          <DialogDrawerTrigger asChild>
+        <Modal open={isOpen} onOpenChange={setIsOpen}>
+          <ModalTrigger asChild>
             <Button className="bg-[#F7BE7A] hover:bg-[#DA8359] text-xl h-12 w-full">
               <FaPlus />
             </Button>
-          </DialogDrawerTrigger>
-          <DialogDrawerContent>
+          </ModalTrigger>
+          <ModalContent>
             <div className="mx-auto w-full max-w-sm">
-              <DialogDrawerHeader>
-                <DialogDrawerTitle>Update Manual Feeding</DialogDrawerTitle>
-                <DialogDrawerDescription>
+              <ModalHeader>
+                <ModalTitle>Update Manual Feeding</ModalTitle>
+                <ModalDescription>
                   Set your manual feeding amount.
-                </DialogDrawerDescription>
-              </DialogDrawerHeader>
+                </ModalDescription>
+              </ModalHeader>
               <div className="flex flex-col p-4 gap-5">
                 <AmountSelector amount={amount} setAmount={setAmount} />
               </div>
             </div>
-            <DialogDrawerFooter>
+            <ModalFooter>
               <Button
                 onClick={handleSubmit}
                 className="hover:bg-[#DA8359] text-md h-12"
               >
                 Save Changes
               </Button>
-              <DialogDrawerClose asChild>
+              <ModalClose asChild>
                 <Button
                   variant="outline"
                   className="hover:bg-[#D9D9D9] text-md h-12"
                 >
                   Cancel
                 </Button>
-              </DialogDrawerClose>
-            </DialogDrawerFooter>
-          </DialogDrawerContent>
-        </DialogDrawer>
+              </ModalClose>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </CardFooter>
     </CustomCard>
   )

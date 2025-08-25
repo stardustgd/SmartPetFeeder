@@ -12,25 +12,19 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     // TODO: use react query in the future
     const getCurrentUser = async () => {
       try {
-        const currentUserResponse = await fetch(
-          'http://localhost:5050/api/auth/currentUser',
-          {
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-          }
-        )
+        const currentUserResponse = await fetch('/api/auth/currentUser', {
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        })
 
         if (!currentUserResponse.ok) {
           throw new Error('Failed to get current user')
         }
 
-        const scheduleResponse = await fetch(
-          'http://localhost:5050/api/schedules',
-          {
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-          }
-        )
+        const scheduleResponse = await fetch('/api/schedules', {
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+        })
 
         if (!scheduleResponse.ok) {
           throw new Error('Failed to get schedules')

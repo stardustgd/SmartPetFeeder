@@ -36,7 +36,7 @@ export default function LoginForm() {
     // TODO: check if a user is already signed in
 
     try {
-      const res = await fetch(`http://localhost:5050/api/auth/login`, {
+      const res = await fetch(`/api/auth/login`, {
         body: JSON.stringify({ email, password }),
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

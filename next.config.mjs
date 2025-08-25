@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   async rewrites() {
-    return process.env.NODE_ENV === 'development'
+    return process.env.NODE_ENV === 'dev'
       ? [
           {
             source: '/api/:path*',

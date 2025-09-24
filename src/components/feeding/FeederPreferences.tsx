@@ -22,10 +22,8 @@ import { Schedule } from '@/types'
 
 export default function FeederPreferences() {
   const { user } = useContext(UserContext)
-  console.log(user)
 
   const [isOpen, setIsOpen] = useState(false)
-  // const { toast } = useToast()
 
   return (
     <div className="w-full bottom-0 absolute pb-16 md:pb-0">

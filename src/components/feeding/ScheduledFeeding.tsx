@@ -44,6 +44,7 @@ export default function ScheduledFeeding() {
         )
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const newEntry = {
         days: selectedDays,
         time: time,
@@ -64,6 +65,7 @@ export default function ScheduledFeeding() {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDeletion = async (index: number) => {
     if (!user) {
       toast({

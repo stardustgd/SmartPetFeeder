@@ -8,7 +8,7 @@ export interface User {
 
 export type UserAction = {
   type: string
-  payload: any // TODO: fix any type
+  payload: any // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
 export interface Preferences {

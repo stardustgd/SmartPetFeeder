@@ -1,6 +1,5 @@
 'use client'
 
-import useAuth from '@/hooks/useAuth'
 import Link from 'next/link'
 import { FaCog } from 'react-icons/fa'
 import { IconType } from 'react-icons'
@@ -35,8 +34,6 @@ function SettingsCard({ title, href, Icon = FaCog }: SettingsCardProps) {
 }
 
 export default function SettingsPage() {
-  useAuth()
-
   return (
     <>
       <NavBar title="Settings" />

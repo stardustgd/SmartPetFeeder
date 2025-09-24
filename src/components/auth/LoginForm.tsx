@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -13,14 +15,10 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
-import { redirect } from 'next/navigation'
-import { useReducer } from 'react'
-import { defaultUser } from '@/src/reducers/UserReducer'
-import { userReducer } from '@/reducers/UserReducer'
-import { SET_USER_DATA } from '@/src/reducers/actionTypes'
+import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
-  const [user, userDispatch] = useReducer(userReducer, defaultUser)
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -44,17 +42,17 @@ export default function LoginForm() {
       })
 
       if (!res.ok) {
+        form.setError('email', { message: '' })
+        form.setError('password', {
+          type: 'server',
+          message: 'Invalid email or password',
+        })
+
         throw new Error('Error logging in')
       }
 
-      const userData = await res.json()
-
-      // userDispatch({
-      //   type: SET_USER_DATA,
-      //   payload: userData,
-      // })
-
-      redirect('/')
+      router.push('/')
+      router.refresh()
     } catch (err) {
       console.error(err)
     }

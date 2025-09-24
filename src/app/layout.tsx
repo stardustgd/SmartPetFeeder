@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 import Footer from '@/components/Footer'
 import { UserProvider } from '../components/UserProvider'
+import { QueryProvider } from '@/components/QueryProvider'
 
 export const metadata: Metadata = {
   title: 'Smart Pet Feeder',
@@ -24,7 +25,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased bg-[#F7BE7A]">
-        <UserProvider>{children}</UserProvider>
+        <QueryProvider>
+          <UserProvider>{children}</UserProvider>
+        </QueryProvider>
         <Toaster />
         <Footer />
       </body>

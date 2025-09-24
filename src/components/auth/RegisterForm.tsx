@@ -28,7 +28,6 @@ export default function RegisterForm() {
     },
   })
 
-  // TODO: Make better
   async function onSubmit(values: z.infer<typeof RegisterSchema>) {
     try {
       const response = await fetch('/api/auth/register', {
@@ -41,42 +40,20 @@ export default function RegisterForm() {
 
       const data = await response.json()
 
-      if (data.message === 'Email already in use') {
-        form.setError('email', {
-          type: 'manual',
-          message: 'This email address is already in use',
-        })
-      } else {
-        const newFeedingAmount = {
-          user: values.email,
-          manualFeedingAmount: 0,
-        }
-
-        await fetch('/api/manualFeedings', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newFeedingAmount),
-        })
-
-        await fetch('/api/schedules', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            user: values.email,
-            schedule: [],
-          }),
-        })
-
-        router.push('/login')
+      if (response.status !== 201) {
+        throw new Error(data.message || 'Something went wrong')
       }
-    } catch (error) {
-      console.error(error)
-      form.setError('confirmPassword', {
-        type: 'manual',
-        message: 'An error occurred during login',
-      })
-      form.setError('password', { type: 'manual', message: '' })
-      form.setError('email', { type: 'manual', message: '' })
+
+      router.push('/login')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        form.setError('confirmPassword', {
+          type: 'manual',
+          message: error.message,
+        })
+        form.setError('password', { type: 'manual', message: '' })
+        form.setError('email', { type: 'manual', message: '' })
+      }
     }
   }
 

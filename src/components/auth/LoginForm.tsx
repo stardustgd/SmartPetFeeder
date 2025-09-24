@@ -15,11 +15,8 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { LoginSchema } from '@/schema'
-import { useRouter } from 'next/navigation'
 
 export default function LoginForm() {
-  const router = useRouter()
-
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -51,8 +48,7 @@ export default function LoginForm() {
         throw new Error('Error logging in')
       }
 
-      router.push('/')
-      router.refresh()
+      window.location.replace('/')
     } catch (err) {
       console.error(err)
     }

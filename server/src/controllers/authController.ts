@@ -60,10 +60,16 @@ export const register = async (
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
+    const defaultPreferences = {
+      manualFeedingAmount: 1,
+      unit: 'grams',
+    }
+
     await collection.insertOne({
       name: req.body.name,
       email: req.body.email,
       password: hashedPassword,
+      preferences: defaultPreferences,
     })
 
     res.status(201).json({ message: 'User registered successfully' })

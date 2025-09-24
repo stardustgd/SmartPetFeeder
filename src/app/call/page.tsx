@@ -1,10 +1,13 @@
-'use client'
-
 import { Button } from '@/components/ui/button'
 import NavBar from '@/components/NavBar'
 import { FaCamera, FaMicrophone, FaPhoneAlt } from 'react-icons/fa'
+import { verifyAuthToken } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
-export default function CallPage() {
+export default async function CallPage() {
+  const user = await verifyAuthToken()
+  if (!user) redirect('/login')
+
   return (
     <div className="flex flex-col bg-linear-to-b from-[#F7BE7A] to-[#DA8359] min-h-screen">
       <NavBar title="Call" />

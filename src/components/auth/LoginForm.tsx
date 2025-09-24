@@ -28,8 +28,6 @@ export default function LoginForm() {
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
     const { email, password } = values
 
-    // TODO: check if a user is already signed in
-
     try {
       const res = await fetch(`/api/auth/login`, {
         body: JSON.stringify({ email, password }),

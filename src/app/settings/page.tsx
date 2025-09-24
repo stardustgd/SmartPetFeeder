@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import { FaCog } from 'react-icons/fa'
 import { IconType } from 'react-icons'
@@ -8,6 +6,8 @@ import { Card, CardHeader } from '@/components/ui/card'
 import NavBar from '@/components/NavBar'
 import { IoIosArrowForward } from 'react-icons/io'
 import { settings } from '@/constants/settings'
+import { verifyAuthToken } from '@/lib/auth'
+import { redirect } from 'next/navigation'
 
 type SettingsCardProps = {
   title: string
@@ -33,7 +33,10 @@ function SettingsCard({ title, href, Icon = FaCog }: SettingsCardProps) {
   )
 }
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const user = await verifyAuthToken()
+  if (!user) redirect('/login')
+
   return (
     <>
       <NavBar title="Settings" />

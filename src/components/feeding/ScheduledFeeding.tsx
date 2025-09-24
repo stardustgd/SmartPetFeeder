@@ -21,9 +21,11 @@ import {
 } from '@/components/ui/modal'
 import ScheduleCard from './ScheduleCard'
 import UserContext from '@/src/contexts/UserContext'
+import { SET_USER_SCHEDULES } from '@/src/reducers/actionTypes'
+import { sortDaysOfWeek } from '@/src/lib/utils'
 
 export default function ScheduledFeeding() {
-  const { user } = useContext(UserContext)
+  const { user, userDispatch } = useContext(UserContext)
   const [selectedDays, setSelectedDays] = useState<string[]>([])
   const [time, setTime] = useState<string>('')
   const [amount, setAmount] = useState<number>(0)
@@ -38,20 +40,36 @@ export default function ScheduledFeeding() {
         )
       }
 
-      if (amount < 1 || amount > 120) {
+      if (amount === undefined || amount < 1 || amount > 120) {
         throw new Error(
           'Please enter a valid feeding amount between 1 and 120.'
         )
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const newEntry = {
-        days: selectedDays,
+        days: sortDaysOfWeek(selectedDays),
         time: time,
-        feedingAmount: amount,
+        amount: amount,
       }
 
-      // After adding new schedule, append it to userSchedules and close menu
+      const response = await fetch('/api/schedules', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(newEntry),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong')
+      }
+
+      userDispatch({
+        type: SET_USER_SCHEDULES,
+        payload: data.schedules,
+      })
+
       setIsOpen(false)
       setSelectedDays([])
       setTime('')
@@ -65,36 +83,36 @@ export default function ScheduledFeeding() {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleDeletion = async (index: number) => {
-    if (!user) {
+  const handleDeletion = async (index: string) => {
+    try {
+      const deleteBody = {
+        scheduleId: index,
+      }
+
+      const response = await fetch('/api/schedules', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(deleteBody),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong')
+      }
+
+      userDispatch({
+        type: SET_USER_SCHEDULES,
+        payload: data.schedules,
+      })
+    } catch (error) {
       toast({
         title: 'Error',
-        description: 'User not found',
+        description: (error as Error).message,
         variant: 'destructive',
       })
-      return
     }
-
-    // fetch(`/api/schedules/user/${user.email}`, {
-    //   method: 'PUT',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ schedule: updatedSchedules }),
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       throw new Error('Failed to delete the schedule')
-    //     }
-    //
-    //     setUserSchedules(updatedSchedules)
-    //   })
-    //   .catch((error) => {
-    //     toast({
-    //       title: 'Error',
-    //       description: error.message,
-    //       variant: 'destructive',
-    //     })
-    //   })
   }
 
   return (
@@ -107,7 +125,7 @@ export default function ScheduledFeeding() {
               days={schedule.days}
               time={schedule.time}
               amount={`${schedule.amount} ${Number(schedule.amount) === 1 ? 'gram' : 'grams'}`}
-              idx={Number(schedule._id)}
+              idx={schedule._id}
               handleDeletion={handleDeletion}
             />
           ))}

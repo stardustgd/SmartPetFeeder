@@ -34,13 +34,13 @@ export default function DaySelector({
         value={selectedDays}
         onValueChange={(newSelectedDays) => setSelectedDays(newSelectedDays)}
       >
-        <DayGroupItem value="sunday" label="Sunday" text="Sun" />
-        <DayGroupItem value="monday" label="Monday" text="Mon" />
-        <DayGroupItem value="tuesday" label="Tuesday" text="Tue" />
-        <DayGroupItem value="wednesday" label="Wednesday" text="Wed" />
-        <DayGroupItem value="thursday" label="Thursday" text="Thu" />
-        <DayGroupItem value="friday" label="Friday" text="Fri" />
-        <DayGroupItem value="saturday" label="Saturday" text="Sat" />
+        <DayGroupItem value="Sun" label="Sunday" text="Sun" />
+        <DayGroupItem value="Mon" label="Monday" text="Mon" />
+        <DayGroupItem value="Tue" label="Tuesday" text="Tue" />
+        <DayGroupItem value="Wed" label="Wednesday" text="Wed" />
+        <DayGroupItem value="Thu" label="Thursday" text="Thu" />
+        <DayGroupItem value="Fri" label="Friday" text="Fri" />
+        <DayGroupItem value="Sat" label="Saturday" text="Sat" />
       </ToggleGroup>
     </div>
   )

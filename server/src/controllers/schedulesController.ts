@@ -66,7 +66,12 @@ export const createSchedule = async (
 
     await collection.insertOne(newSchedule)
 
-    res.status(201).send({ message: 'Schedule successfully added' })
+    const userSchedules = await collection.find({ userId: user }).toArray()
+
+    res.status(201).send({
+      message: 'Schedule successfully added',
+      schedules: userSchedules,
+    })
   } catch (error) {
     next(error)
   }
@@ -97,7 +102,12 @@ export const deleteSchedule = async (
       userId: userId,
     })
 
-    res.status(200).send({ message: 'Schedule successfully deleted' })
+    const userSchedules = await collection.find({ userId: userId }).toArray()
+
+    res.status(200).send({
+      message: 'Schedule successfully deleted',
+      schedules: userSchedules,
+    })
   } catch (error) {
     next(error)
   }

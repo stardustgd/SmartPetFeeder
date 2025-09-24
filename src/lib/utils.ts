@@ -23,15 +23,7 @@ export function capitalizeDays(days: string[]) {
 }
 
 export function sortDaysOfWeek(days: string[]) {
-  const dayOrder = [
-    'sunday',
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-  ]
+  const dayOrder = ['Sun', 'Mon', 'Tues', 'Wed', 'Thu', 'Fri', 'Sat']
 
   return days.sort((a, b) => dayOrder.indexOf(a) - dayOrder.indexOf(b))
 }

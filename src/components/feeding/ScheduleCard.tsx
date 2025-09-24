@@ -20,8 +20,8 @@ type ScheduleCardProps = {
   days: string[]
   time: string
   amount: string
-  idx: number
-  handleDeletion: (index: number) => void
+  idx: string
+  handleDeletion: (index: string) => void
 }
 
 export default function ScheduleCard({

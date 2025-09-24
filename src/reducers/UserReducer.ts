@@ -24,6 +24,14 @@ export const userReducer = (state: User, action: UserAction): User => {
         ...state,
         schedules: action.payload,
       }
+    case actions.SET_USER_PREFERENCES:
+      return {
+        ...state,
+        preferences: {
+          ...state.preferences,
+          ...action.payload,
+        },
+      }
 
     default:
       return state

@@ -20,6 +20,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, [data])
 
   return (
-    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ user, userDispatch }}>
+      {children}
+    </UserContext.Provider>
   )
 }

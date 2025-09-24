@@ -6,7 +6,12 @@ import { useToast } from '@/hooks/use-toast'
 import CustomCard from '@/components/CustomCard'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { SUCCESS_TOAST, MANUAL_FEEDING_SUCCESS_MESSAGE } from '@/constants'
+import {
+  SUCCESS_TOAST,
+  MANUAL_FEEDING_SUCCESS_MESSAGE,
+  ERROR_TOAST,
+  MANUAL_FEEDING_ERROR_MESSAGE,
+} from '@/constants'
 import {
   Modal,
   ModalClose,
@@ -20,23 +25,54 @@ import {
 import { formatManualFeedingAmount } from '@/lib/utils'
 import AmountSelector from '@/components/inputs/AmountSelector'
 import UserContext from '@/src/contexts/UserContext'
+import { SET_USER_PREFERENCES } from '@/src/reducers/actionTypes'
 
 export default function ManualFeeding() {
-  const { user } = useContext(UserContext)
+  const { user, userDispatch } = useContext(UserContext)
   const manualFeedingAmount = user.preferences.manualFeedingAmount
   const [amount, setAmount] = useState<number>(manualFeedingAmount)
   const [isOpen, setIsOpen] = useState(false)
   const { toast } = useToast()
 
-  // TODO: Implement manual feeding action
-
   const handleSubmit = async () => {
-    toast({
-      title: SUCCESS_TOAST,
-      description: MANUAL_FEEDING_SUCCESS_MESSAGE,
-    })
+    if (amount < 1 || amount > 10) {
+      toast({
+        title: ERROR_TOAST,
+        description: MANUAL_FEEDING_ERROR_MESSAGE,
+      })
+    }
 
-    setIsOpen(false)
+    const newAmount = {
+      manualFeedingAmount: amount,
+    }
+
+    // Update preferences in Mongo and in Context
+    await fetch('/api/users/preferences', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(newAmount),
+    })
+      .then((response) => {
+        if (response.ok) {
+          userDispatch({
+            type: SET_USER_PREFERENCES,
+            payload: { manualFeedingAmount: amount },
+          })
+
+          toast({
+            title: SUCCESS_TOAST,
+            description: MANUAL_FEEDING_SUCCESS_MESSAGE,
+          })
+          setIsOpen(false)
+        }
+      })
+      .catch((_) => {
+        toast({
+          title: ERROR_TOAST,
+          description: 'Something went wrong',
+        })
+      })
   }
 
   return (

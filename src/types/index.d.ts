@@ -1,3 +1,10 @@
+import { Dispatch } from 'react'
+
+export interface iUserContext {
+  user: User
+  userDispatch: Dispatch<UserAction>
+}
+
 export interface User {
   id: string
   name: string

@@ -2,8 +2,11 @@
 
 import { createContext } from 'react'
 import { defaultUser } from '../reducers/UserReducer'
-import { User } from '@/types'
+import { iUserContext } from '@/types'
 
-const UserContext = createContext<{ user: User }>({ user: defaultUser })
+const UserContext = createContext<iUserContext>({
+  user: defaultUser,
+  userDispatch: () => {},
+})
 
 export default UserContext

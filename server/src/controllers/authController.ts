@@ -78,6 +78,19 @@ export const register = async (
   }
 }
 
+export const logout = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  res.clearCookie('authorization', {
+    httpOnly: true,
+    sameSite: 'lax',
+  })
+
+  res.status(200).json({ message: 'Logged out successfully' })
+}
+
 export const currentUser = async (
   req: AuthenticatedRequest,
   res: Response,

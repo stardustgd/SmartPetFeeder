@@ -8,6 +8,7 @@ import { IoIosArrowForward } from 'react-icons/io'
 import { settings } from '@/constants/settings'
 import { verifyAuthToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import LogoutButton from '@/src/components/auth/LogoutButton'
 
 type SettingsCardProps = {
   title: string
@@ -40,6 +41,7 @@ export default async function SettingsPage() {
   return (
     <>
       <NavBar title="Settings" />
+      <LogoutButton />
       <div className="flex flex-col gap-3 px-5 py-5 w-screen h-fit rounded-t-2xl bg-[#F2F2F2] text-black pb-24 md:pb-0 md:pl-20">
         <Label className="text-md font-bold">General</Label>
         {settings.general.map((setting) => (

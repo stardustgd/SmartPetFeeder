@@ -42,9 +42,9 @@ export default function ScheduleCard({
         <div className="flex flex-col">
           <h1 className="text-2xl">{convertToAMPM(time)}</h1>
           <h1>
-            {`${amount}.`}
+            {amount}
             <br />
-            {`${formattedDays}.`}
+            {formattedDays}
           </h1>
         </div>
         <Modal open={isOpen} onOpenChange={setIsOpen}>

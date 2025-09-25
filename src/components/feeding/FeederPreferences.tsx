@@ -100,11 +100,10 @@ function ScheduledFeedingCard({
           ) : (
             schedules.map((schedule) => (
               <div key={schedule._id}>
-                <p>{convertToAMPM(schedule.time)}</p>
                 <p>
-                  {schedule.amount} {unit}
+                  {convertToAMPM(schedule.time)} - {schedule.amount} {unit}
                 </p>
-                <p>{schedule.days}</p>
+                <p>{schedule.days.join(', ')}</p>
                 <hr className="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
               </div>
             ))

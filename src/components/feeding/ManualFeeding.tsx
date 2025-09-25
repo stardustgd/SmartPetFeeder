@@ -67,7 +67,7 @@ export default function ManualFeeding() {
           setIsOpen(false)
         }
       })
-      .catch((_) => {
+      .catch(() => {
         toast({
           title: ERROR_TOAST,
           description: 'Something went wrong',

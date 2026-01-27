@@ -10,12 +10,13 @@ export const getUser = async (
 ) => {
   const { value } = req.params
   const { by } = req.query
+  const method = Array.isArray(by) ? by[0] : by
 
   try {
     const user =
-      by === 'email'
-        ? await findUserByEmail(value)
-        : await findUserById(new ObjectId(value))
+      method === 'email'
+        ? await findUserByEmail(value[0])
+        : await findUserById(new ObjectId(value[0]))
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' })

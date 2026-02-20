@@ -6,8 +6,6 @@ import { Card, CardHeader } from '@/components/ui/card'
 import NavBar from '@/components/NavBar'
 import { IoIosArrowForward } from 'react-icons/io'
 import { settings } from '@/constants/settings'
-import { verifyAuthToken } from '@/lib/auth'
-import { redirect } from 'next/navigation'
 import LogoutButton from '@/src/components/auth/LogoutButton'
 
 type SettingsCardProps = {
@@ -35,9 +33,6 @@ function SettingsCard({ title, href, Icon = FaCog }: SettingsCardProps) {
 }
 
 export default async function SettingsPage() {
-  const user = await verifyAuthToken()
-  if (!user) redirect('/login')
-
   return (
     <>
       <NavBar title="Settings" />

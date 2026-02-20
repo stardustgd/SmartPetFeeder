@@ -1,11 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
-import { Toaster } from '@/components/ui/toaster'
-import Footer from '@/components/Footer'
-import { UserProvider } from '../components/UserProvider'
-import { QueryProvider } from '@/components/QueryProvider'
-
 export const metadata: Metadata = {
   title: 'Smart Pet Feeder',
   description: 'Smart Pet Feeder',
@@ -24,13 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-[#F7BE7A]">
-        <QueryProvider>
-          <UserProvider>{children}</UserProvider>
-        </QueryProvider>
-        <Toaster />
-        <Footer />
-      </body>
+      <body className="antialiased bg-[#F7BE7A]">{children}</body>
     </html>
   )
 }
